@@ -1,0 +1,46 @@
+[
+  {
+    "id": "1",
+    "titulo": "Sistema ERP Textil",
+    "descripcion": "Plataforma integral de gestión empresarial para empresa textil con módulos de producción, inventario, ventas y contabilidad.",
+    "tecnologias": ["Laravel", "MySQL", "Vue.js", "Redis"],
+    "categoria": "ERP",
+    "imagen": null,
+    "url": null,
+    "destacado": true,
+    "orden": 1
+  },
+  {
+    "id": "2",
+    "titulo": "Portal de Comparación de Precios",
+    "descripcion": "Plataforma web de comparación de precios en tiempo real con scraping automatizado, clasificación por IA y panel de gestión.",
+    "tecnologias": ["Next.js", "Laravel", "MySQL", "Python", "AI"],
+    "categoria": "E-commerce",
+    "imagen": null,
+    "url": "https://compara2.pe",
+    "destacado": true,
+    "orden": 2
+  },
+  {
+    "id": "3",
+    "titulo": "Sistema de Agenda Legal",
+    "descripcion": "Aplicación web para gestión de agenda, expedientes y clientes para estudio de abogados.",
+    "tecnologias": ["Laravel", "MySQL", "Bootstrap"],
+    "categoria": "CRM",
+    "imagen": null,
+    "url": null,
+    "destacado": false,
+    "orden": 3
+  },
+  {
+    "id": "4",
+    "titulo": "Sistema de Inventario y Ventas",
+    "descripcion": "Control de inventario, punto de venta y reportes para cadena de tiendas de ropa.",
+    "tecnologias": ["PHP", "MySQL", "JavaScript"],
+    "categoria": "ERP",
+    "imagen": null,
+    "url": null,
+    "destacado": false,
+    "orden": 4
+  }
+]
