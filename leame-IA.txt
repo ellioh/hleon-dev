@@ -1,0 +1,341 @@
+================================================================================
+  LEAME-IA.TXT — hleon.dev
+  Documentacion tecnica para asistentes de IA
+  Ultima actualizacion: 2026-07-06
+================================================================================
+
+PROPOSITO DEL PROYECTO
+--------------------------------------------------------------------------------
+Sitio web personal y portafolio profesional de Hector Leon, consultor de
+sistemas y desarrollo de software con base en Peru. El sitio funciona como
+carta de presentacion, catalogo de proyectos, blog tecnico en espanol y punto
+de captacion de leads para servicios de consultoria (ERP, APIs, digitalizacion
+de empresas).
+
+URL de produccion: https://hleon.dev
+Repositorio:       https://github.com/ellioh/hleon-dev
+Rama principal:    main
+
+El dueno del proyecto trabaja tambien en los proyectos compara2-back,
+compara2-front y scraperfy. Cuando se pide hacer cambios aqui, el contexto
+es este repositorio unicamente.
+
+
+STACK TECNICO
+--------------------------------------------------------------------------------
+- Framework:      Next.js 16 (App Router) con React 19
+- Lenguaje:       TypeScript 5 (strict mode)
+- Estilos:        Tailwind CSS 3 — sin CSS modules, sin styled-components
+- Base de datos:  NINGUNA — almacenamiento en archivos JSON en /data/
+- Autenticacion:  Cookie httpOnly propia (sin NextAuth, sin JWT de terceros)
+- Dependencias:   Solo next + react + react-dom (sin librerias de UI externas)
+- Markdown:       Renderer propio en lib/markdown.ts (sin remark, sin marked)
+- Deploy:         Vercel (inferido por estructura; sin config especial)
+
+Comandos:
+  npm run dev     — servidor de desarrollo en http://localhost:3000
+  npm run build   — build de produccion (verifica TypeScript)
+  npm run start   — sirve el build de produccion
+  npx tsc --noEmit — solo verificacion de tipos (sin emitir)
+
+
+PALETA DE COLORES Y DISENO
+--------------------------------------------------------------------------------
+Color base:    slate-950 (fondo principal)
+Acento:        indigo-400 / indigo-500 (botones, enlaces activos, badges)
+Texto:         white (titulos), slate-300/400 (cuerpo), slate-500/600 (muted)
+Bordes:        slate-800 (cards, separadores)
+Cards hover:   border-indigo-800/60, text-indigo-300
+
+Convenciones de diseno:
+- Bordes redondeados: rounded-2xl para cards grandes, rounded-xl para pequenos
+- Sin shadows excepto en CTAs principales (shadow-lg shadow-indigo-900/40)
+- Tipografia: font-extrabold para h1, font-bold para h2/h3
+- Animacion del punto pulsante: bg-indigo-400 animate-pulse (en el logo)
+- Gradiente del hero: from-indigo-400 to-cyan-400 bg-clip-text text-transparent
+- Nav fija: backdrop-blur bg-slate-950/90 border-b border-slate-800/60
+
+
+ESTRUCTURA DE ARCHIVOS
+--------------------------------------------------------------------------------
+hleon-dev/
+├── app/
+│   ├── layout.tsx                  — RootLayout: metadata SEO global + JSON-LD
+│   ├── page.tsx                    — Homepage (server component): hero, tech stack,
+│   │                                 proyectos destacados, blog preview, footer
+│   ├── portafolio/
+│   │   └── page.tsx                — Listado completo de proyectos
+│   ├── blog/
+│   │   ├── page.tsx                — Listado de posts con filtros por categoria
+│   │   ├── [slug]/page.tsx         — Post individual con JSON-LD BlogPosting
+│   │   └── categoria/[categoria]/  — Posts filtrados por categoria
+│   │       └── page.tsx
+│   ├── contacto/
+│   │   └── page.tsx                — Formulario de contacto (client component)
+│   ├── sitemap.ts                  — MetadataRoute.Sitemap automatico
+│   ├── robots.ts                   — MetadataRoute.Robots
+│   ├── feed.xml/
+│   │   └── route.ts                — RSS 2.0 del blog
+│   ├── admin/
+│   │   ├── page.tsx                — Login del panel admin
+│   │   ├── layout.tsx              — Layout del area /admin
+│   │   └── dashboard/
+│   │       ├── layout.tsx          — Sidebar/nav del dashboard con links
+│   │       ├── page.tsx            — Dashboard principal: stats de solicitudes y blog
+│   │       ├── solicitudes/page.tsx — Ver solicitudes de contacto
+│   │       ├── proyectos/page.tsx  — CRUD de proyectos del portafolio
+│   │       └── blog/
+│   │           ├── page.tsx        — Listado de posts (admin)
+│   │           ├── nuevo/page.tsx  — Crear post
+│   │           └── [id]/page.tsx   — Editar post
+│   └── api/
+│       ├── contacto/route.ts       — POST: guarda solicitud en data/solicitudes.json
+│       └── admin/
+│           ├── login/route.ts      — POST: verifica password, setea cookie
+│           ├── logout/route.ts     — POST: borra cookie
+│           ├── solicitudes/route.ts — GET: lista; PATCH: marcar leido
+│           ├── proyectos/route.ts  — GET/POST/PUT/DELETE proyectos
+│           ├── blog/route.ts       — GET/POST/PUT/DELETE posts
+│           └── blog/[id]/route.ts  — GET post individual por ID
+├── lib/
+│   ├── auth.ts       — generateToken, verifyToken, isAuthenticated (cookie: hleon_admin_token)
+│   ├── blog.ts       — getPosts, getPost, getPostById, savePost, deletePost,
+│   │                   getCategorias, getPostsByCategoria, slugify
+│   ├── data.ts       — getProyectos, saveProyectos, getSolicitudes, saveSolicitud, marcarLeido
+│   └── markdown.ts   — renderMarkdown(raw: string): string — convierte Markdown a HTML
+├── data/
+│   ├── posts.json       — Array de objetos Post (blog)
+│   ├── proyectos.json   — Array de objetos Proyecto (portafolio)
+│   └── solicitudes.json — Array de objetos Solicitud (formulario de contacto)
+├── public/              — Assets estaticos (imagenes, favicon, etc.)
+├── tailwind.config.ts
+├── tsconfig.json
+└── package.json
+
+
+MODELOS DE DATOS
+--------------------------------------------------------------------------------
+
+Post (data/posts.json):
+{
+  "id": "post-001",                    // string unico, tipicamente "post-NNN"
+  "titulo": "...",
+  "slug": "slug-kebab-case",           // usado como URL: /blog/[slug]
+  "resumen": "...",                    // texto corto para cards y meta description
+  "contenido": "## H2\n\nParrafo...", // Markdown, renderizado por lib/markdown.ts
+  "categoria": "ERP",                  // string libre, se usa en filtros
+  "fechaPublicacion": "2025-01-15",    // ISO date string (YYYY-MM-DD)
+  "fechaActualizacion": "2025-01-15",
+  "tags": ["erp", "pymes"],            // array de strings
+  "metaDescripcion": "...",            // max 160 chars, para SEO
+  "publicado": true                    // false = borrador (no aparece en publico)
+}
+
+Proyecto (data/proyectos.json):
+{
+  "id": "...",
+  "titulo": "...",
+  "descripcion": "...",
+  "tecnologias": ["Laravel", "MySQL"],
+  "categoria": "ERP",
+  "imagen": null,                      // o URL de imagen
+  "url": null,                         // o URL del proyecto en vivo
+  "destacado": true,                   // aparece en homepage
+  "orden": 1
+}
+
+Solicitud (data/solicitudes.json):
+{
+  "id": "1700000000000",               // timestamp como string
+  "nombre": "...",
+  "email": "...",
+  "empresa": "...",
+  "tipo": "ERP",                       // tipo de servicio solicitado
+  "descripcion": "...",
+  "presupuesto": "...",
+  "fecha": "2025-01-15T10:00:00.000Z", // ISO string completo
+  "leido": false
+}
+
+
+AUTENTICACION DEL PANEL ADMIN
+--------------------------------------------------------------------------------
+Sistema propio sin librerias externas:
+
+1. El usuario va a /admin y llena un formulario con password
+2. POST /api/admin/login — verifica contra ADMIN_PASSWORD (env var)
+3. Si correcto: setea cookie httpOnly "hleon_admin_token" con un token Base64
+4. El token se genera con: Buffer.from(`${SECRET}:${Date.now()}`).toString("base64")
+5. Se verifica con: decoded.startsWith(`${SECRET}:`)
+6. SECRET viene de env var ADMIN_TOKEN_SECRET (minimo 32 chars recomendado)
+7. Las rutas protegidas llaman a isAuthenticated() desde lib/auth.ts
+8. Las API routes de admin verifican el token manualmente via cookies()
+
+Variables de entorno necesarias (.env.local):
+  ADMIN_PASSWORD=tu-password-seguro
+  ADMIN_TOKEN_SECRET=minimo-32-caracteres-aleatorios
+
+NOTA: La cookie admin del blog en las API routes de /api/admin/blog/* usa
+ADMIN_SECRET (diferente variable) para verificar directamente el valor de la
+cookie. Revision posible inconsistencia si se encuentra error 401 en blog API.
+
+
+CAPA DE DATOS (sin base de datos)
+--------------------------------------------------------------------------------
+Todo se guarda en archivos JSON en /data/. Las funciones de lib/*.ts usan
+Node.js fs directamente (solo funcionan en server components y API routes).
+
+NUNCA importar lib/blog.ts o lib/data.ts en componentes "use client".
+
+Patron para leer:
+  const posts = getPosts();           // todos los publicados
+  const posts = getPosts(false);      // incluye borradores (para admin)
+  const post  = getPost("mi-slug");   // por slug
+  const post  = getPostById("123");   // por ID
+
+Patron para escribir:
+  savePost({ titulo, slug, ... })     // crea o actualiza (si tiene id, actualiza)
+  deletePost("123")
+
+El markdown del campo "contenido" puede tener saltos de linea reales (no solo \n).
+Node.js JSON.parse los acepta aunque tecnicamente sea JSON invalido.
+
+
+SEO Y METADATOS
+--------------------------------------------------------------------------------
+- app/layout.tsx: metadata global con metadataBase, title template "%s | hleon.dev",
+  OG, Twitter card, keywords, canonical, alternates (RSS)
+- JSON-LD en layout.tsx: Person schema + WebSite schema
+- app/blog/[slug]/page.tsx: generateMetadata dinamico + JSON-LD BlogPosting
+- app/sitemap.ts: exporta funcion sitemap() que devuelve MetadataRoute.Sitemap
+  (incluye paginas estaticas + posts + categorias)
+- app/robots.ts: permite todo excepto /admin/ y /api/admin/
+- app/feed.xml/route.ts: RSS 2.0 con los ultimos 20 posts publicados
+
+Title template: "%s | hleon.dev"
+Ejemplo: "Cómo implementar un ERP | hleon.dev"
+
+
+MARKDOWN RENDERER (lib/markdown.ts)
+--------------------------------------------------------------------------------
+Renderer propio basado en regex. No usa remark, marked ni ninguna libreria.
+
+Soporta:
+  ## Titulo H2
+  ### Titulo H3
+  ```lang                     — bloque de codigo con fondo slate-800
+  code```
+  **negrita**
+  *italica*
+  `codigo inline`
+  [texto](url)
+  - item de lista
+
+Clases Tailwind aplicadas:
+  H2:    text-2xl font-bold text-white mt-8 mb-4
+  H3:    text-xl font-semibold text-white mt-6 mb-3
+  Cod:   bg-slate-800 rounded-xl p-4 my-4 overflow-x-auto text-sm font-mono text-cyan-400
+  p:     text-slate-300 leading-relaxed mb-4
+  ul:    list-none space-y-2 mb-4 (bullets: text-indigo-400)
+  a:     text-indigo-400 hover:text-indigo-300 underline
+
+Para renderizar en un componente:
+  import { renderMarkdown } from "@/lib/markdown";
+  const html = renderMarkdown(post.contenido);
+  <div dangerouslySetInnerHTML={{ __html: html }} />
+
+
+SOCIAL PROFILES (homepage)
+--------------------------------------------------------------------------------
+Los links de redes sociales estan definidos como constantes en app/page.tsx:
+
+  const SOCIAL = {
+    upwork:   "#",  // cambiar a URL real cuando exista perfil
+    workana:  "#",
+    linkedin: "#",
+    github:   "https://github.com/ellioh",
+  };
+
+Los links con valor "#" NO se renderizan (condicional: href !== "#").
+Para activar un link, reemplazar "#" con la URL real.
+
+
+PANEL ADMIN — ESTRUCTURA
+--------------------------------------------------------------------------------
+URL base: /admin
+Login:    /admin (formulario de password)
+
+Rutas del dashboard:
+  /admin/dashboard              — stats: solicitudes sin leer + articulos publicados
+  /admin/dashboard/solicitudes  — ver y marcar como leidas las solicitudes
+  /admin/dashboard/proyectos    — CRUD completo de proyectos del portafolio
+  /admin/dashboard/blog         — listar posts (con publicar/despublicar/editar/eliminar)
+  /admin/dashboard/blog/nuevo   — crear nuevo post
+  /admin/dashboard/blog/[id]    — editar post existente
+
+El dashboard tiene un layout con sidebar (app/admin/dashboard/layout.tsx).
+Las paginas del dashboard son server components excepto las de blog que son
+"use client" (porque tienen formularios interactivos).
+
+
+PATRONES Y CONVENCIONES
+--------------------------------------------------------------------------------
+1. Server components por defecto — solo agregar "use client" cuando hay
+   useState, useEffect, event handlers o interactividad del navegador.
+
+2. Si un server component necesita datos Y hay interactividad, extraer la
+   parte interactiva a un componente "use client" separado.
+
+3. Rutas API en /api/admin/* siempre verifican isAuthenticated() primero.
+   Si no esta autenticado: return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
+4. generateStaticParams en /blog/[slug] y /blog/categoria/[categoria] para SSG.
+   generateMetadata para metadata dinamica por post/categoria.
+
+5. No hay imagenes de posts — todo es texto/markdown. Si se agregan imagenes,
+   usar Next.js Image con la propiedad alt.
+
+6. Los IDs de posts/proyectos son strings (tipicamente "post-001", "1700000000000").
+   Los nuevos registros usan Date.now().toString() como ID.
+
+7. Para anadir una nueva seccion al homepage (app/page.tsx): es un server
+   component, puede llamar a getPosts(), getProyectos(), etc. directamente.
+
+8. Tailwind: no usar estilos inline ni @apply. Usar clases directamente.
+   Extension de tema: editar tailwind.config.ts si se necesitan colores custom.
+
+9. No hay internacionalizacion — todo el contenido es en espanol.
+
+
+ERRORES COMUNES Y SOLUCIONES
+--------------------------------------------------------------------------------
+Error: "You're importing a component that needs ... only works in a Client Component"
+Solucion: El componente usa fs, cookies() u otra API de servidor. Moverlo fuera
+del "use client" o crear un server component padre.
+
+Error: TypeScript en tipo union (ej. "unico" | "mensual" | "cotizar") no asignable
+Solucion: Declarar el tipo explicitamente en useState<TipoUnion>({...}) o
+definir una interfaz separada con el tipo correcto.
+
+Error: JSON.parse falla en posts.json
+Causa probable: El archivo tiene saltos de linea reales dentro de strings JSON.
+Node.js los acepta, pero algunas herramientas no. Usar JSON.stringify al escribir.
+
+Error: Cookie no encontrada en API route
+Revisar: En hleon.dev la cookie se llama "hleon_admin_token". Las API routes de
+blog verifican ADMIN_SECRET env var directamente. Asegurarse que ambas variables
+esten en .env.local.
+
+
+GIT Y DEPLOY
+--------------------------------------------------------------------------------
+Repositorio: https://github.com/ellioh/hleon-dev
+Rama: main (unica rama activa)
+Deploy: cada push a main dispara deploy automatico en Vercel
+
+Workflow estandar:
+  git add <archivos>
+  git commit -m "descripcion del cambio"
+  git push
+
+Nunca hacer push de .env.local (esta en .gitignore).
