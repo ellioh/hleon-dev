@@ -1,11 +1,14 @@
 import { getProyectos, getSolicitudes } from "@/lib/data";
+import { getPosts } from "@/lib/blog";
 import Link from "next/link";
 
 export default function DashboardPage() {
   const proyectos = getProyectos();
   const solicitudes = getSolicitudes();
+  const posts = getPosts(false);
   const pendientes = solicitudes.filter((s) => !s.leido).length;
   const destacados = proyectos.filter((p) => p.destacado).length;
+  const publicados = posts.filter((p) => p.publicado).length;
 
   return (
     <div>
@@ -15,7 +18,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         {[
           {
             label: "Proyectos totales",
@@ -42,6 +45,12 @@ export default function DashboardPage() {
             color: pendientes > 0
               ? "from-red-500/10 to-rose-500/10 border-red-500/30"
               : "from-slate-500/10 to-slate-600/10 border-slate-700",
+          },
+          {
+            label: "Artículos publicados",
+            value: publicados,
+            icon: "✍️",
+            color: "from-violet-500/10 to-purple-500/10 border-violet-500/20",
           },
         ].map((s) => (
           <div
@@ -89,9 +98,14 @@ export default function DashboardPage() {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-white font-semibold">Proyectos recientes</h2>
-            <Link href="/admin/dashboard/proyectos" className="text-indigo-400 hover:text-indigo-300 text-sm transition-colors">
-              Gestionar →
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/admin/dashboard/blog" className="text-violet-400 hover:text-violet-300 text-sm transition-colors">
+                Blog →
+              </Link>
+              <Link href="/admin/dashboard/proyectos" className="text-indigo-400 hover:text-indigo-300 text-sm transition-colors">
+                Proyectos →
+              </Link>
+            </div>
           </div>
           {proyectos.length === 0 ? (
             <p className="text-slate-500 text-sm">No hay proyectos aún.</p>

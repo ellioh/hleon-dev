@@ -1,5 +1,14 @@
 import { getProyectos } from "@/lib/data";
+import { getPosts } from "@/lib/blog";
 import Link from "next/link";
+
+// Actualiza estas URLs con tus perfiles reales
+const SOCIAL = {
+  upwork: "#", // "https://www.upwork.com/freelancers/~..."
+  workana: "#", // "https://www.workana.com/freelancer/..."
+  linkedin: "#", // "https://www.linkedin.com/in/..."
+  github: "https://github.com/ellioh",
+};
 
 const services = [
   {
@@ -96,6 +105,7 @@ const testimonials = [
 export default async function Home() {
   const proyectos = getProyectos();
   const destacados = proyectos.filter((p) => p.destacado).slice(0, 3);
+  const recentPosts = getPosts().slice(0, 3);
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -120,6 +130,9 @@ export default async function Home() {
               </Link>
               <Link href="#tecnologias" className="text-slate-400 hover:text-white text-sm transition-colors">
                 Tecnologías
+              </Link>
+              <Link href="/blog" className="text-slate-400 hover:text-white text-sm transition-colors">
+                Blog
               </Link>
               <Link href="/portafolio" className="text-slate-400 hover:text-white text-sm transition-colors">
                 Todos los proyectos
@@ -170,6 +183,49 @@ export default async function Home() {
             >
               Ver mi trabajo
             </Link>
+          </div>
+
+          {/* Social profiles */}
+          <div className="flex flex-wrap justify-center gap-3 mt-8 pt-8 border-t border-slate-800/60">
+            <span className="text-slate-500 text-sm self-center">Encuéntrame en:</span>
+            {SOCIAL.upwork !== "#" && (
+              <a
+                href={SOCIAL.upwork}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-900/30 border border-green-700/40 text-green-400 text-sm hover:bg-green-900/50 transition-all"
+              >
+                ↗ Upwork
+              </a>
+            )}
+            {SOCIAL.workana !== "#" && (
+              <a
+                href={SOCIAL.workana}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-900/30 border border-blue-700/40 text-blue-400 text-sm hover:bg-blue-900/50 transition-all"
+              >
+                ↗ Workana
+              </a>
+            )}
+            {SOCIAL.linkedin !== "#" && (
+              <a
+                href={SOCIAL.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-900/30 border border-sky-700/40 text-sky-400 text-sm hover:bg-sky-900/50 transition-all"
+              >
+                in LinkedIn
+              </a>
+            )}
+            <a
+              href={SOCIAL.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-400 text-sm hover:bg-slate-700 transition-all"
+            >
+              GitHub
+            </a>
           </div>
         </div>
       </section>
@@ -338,6 +394,60 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* BLOG PREVIEW */}
+      {recentPosts.length > 0 && (
+        <section className="py-24 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-end justify-between mb-12">
+              <div>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Artículos recientes</h2>
+                <p className="text-slate-400 max-w-xl">
+                  Escribo sobre desarrollo de sistemas, digitalización y tecnología para empresas.
+                </p>
+              </div>
+              <Link
+                href="/blog"
+                className="hidden sm:inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 text-sm transition-colors shrink-0"
+              >
+                Ver todos los artículos →
+              </Link>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {recentPosts.map((post) => (
+                <Link
+                  key={post.id}
+                  href={`/blog/${post.slug}`}
+                  className="group bg-slate-900/50 border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-6 flex flex-col gap-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/5"
+                >
+                  <span className="text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-full w-fit">
+                    {post.categoria}
+                  </span>
+                  <h3 className="text-white font-semibold leading-snug group-hover:text-indigo-300 transition-colors">
+                    {post.titulo}
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed flex-1">{post.resumen}</p>
+                  <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-800">
+                    <time dateTime={post.fechaPublicacion}>
+                      {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </time>
+                    <span className="text-indigo-400 group-hover:translate-x-0.5 transition-transform">Leer →</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="text-center mt-8 sm:hidden">
+              <Link href="/blog" className="text-indigo-400 hover:text-indigo-300 text-sm transition-colors">
+                Ver todos los artículos →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* TESTIMONIALS */}
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
@@ -420,6 +530,7 @@ export default async function Home() {
             <div className="flex flex-wrap gap-6 text-sm text-slate-400">
               <Link href="#servicios" className="hover:text-white transition-colors">Servicios</Link>
               <Link href="/portafolio" className="hover:text-white transition-colors">Portafolio</Link>
+              <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
               <Link href="#proceso" className="hover:text-white transition-colors">Proceso</Link>
               <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
             </div>
