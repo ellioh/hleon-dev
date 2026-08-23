@@ -15,10 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPost(slug);
-  if (!post) return { title: "Artículo no encontrado | hleon.dev" };
+  if (!post) return { title: "Artículo no encontrado" };
 
   return {
-    title: `${post.titulo} | hleon.dev`,
+    title: post.titulo,
     description: post.metaDescripcion,
     keywords: post.tags,
     authors: [{ name: "Héctor León", url: "https://hleon.dev" }],

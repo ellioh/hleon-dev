@@ -2,11 +2,18 @@
   "name": "hleon-dev",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:migrate": "node packages/db/src/migrate.mjs",
+    "db:seed": "node packages/db/seeders/0001_taxonomia_base.mjs",
+    "typecheck:packages": "npm run typecheck --workspaces --if-present"
   },
   "dependencies": {
     "next": "^16.2.10",

@@ -1,0 +1,69 @@
+# Fase 1: nginx + laravel-api + mysql. react-admin se agrega en la Fase 3
+# cuando exista apps/admin (ver docs/adr/0005). Next.js NO entra aquí -
+# se queda en Vercel (ver revisión de arquitectura).
+#
+# Mismo archivo para desarrollo y producción (paridad dev/prod): en
+# desarrollo, backend/laravel se monta como volumen (hot-reload sin
+# rebuild); en producción, se usa la imagen construida por el Dockerfile
+# sin el volumen de código (ver docker-compose.prod.yml, Fase 5).
+#
+# Uso local:
+#   cp docker/.env.example docker/.env   (completar contraseñas)
+#   docker compose --env-file docker/.env -f docker/docker-compose.yml up --build
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-hleon_dev}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  laravel:
+    build:
+      context: ..
+      dockerfile: docker/laravel/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - ../backend/laravel/.env
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-hleon_dev}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      # Desarrollo: código montado, cambios sin rebuild. En producción
+      # (Fase 5) esta línea se omite para usar lo que el Dockerfile copió.
+      - ../backend/laravel:/var/www/html
+    expose:
+      - "9000"
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - laravel
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../backend/laravel/public:/var/www/html/public:ro
+    ports:
+      - "${NGINX_PORT:-8080}:80"
+
+volumes:
+  mysql_data:

@@ -15,12 +15,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { categoria } = await params;
   const decoded = decodeURIComponent(categoria);
   const cats = getCategorias().map((c) => c.toLowerCase());
-  if (!cats.includes(decoded)) return { title: "Categoría no encontrada | hleon.dev" };
+  if (!cats.includes(decoded)) return { title: "Categoría no encontrada" };
 
   const displayName = getCategorias().find((c) => c.toLowerCase() === decoded) ?? decoded;
 
   return {
-    title: `${displayName} — Blog | hleon.dev`,
+    title: `${displayName} — Blog`,
     description: `Artículos sobre ${displayName} — desarrollo de software empresarial, sistemas a medida y digitalización de empresas.`,
     openGraph: {
       title: `${displayName} — Blog de Héctor León`,
