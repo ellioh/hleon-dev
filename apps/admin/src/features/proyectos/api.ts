@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import type { PaginatedResponse, Proyecto, ProyectoSummary } from "@/types/api";
 import type { ProyectoFormValues } from "@/features/proyectos/proyecto-schema";
-import { seoFormToPayload } from "@/features/proyectos/seo-payload";
+import { seoFormToPayload } from "@/lib/seo-payload";
 
 export interface ProyectoFiltros {
   busqueda?: string;

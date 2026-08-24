@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getPosts, getCategorias } from "@/lib/blog";
+import { getPostsPublicados } from "@/lib/posts-api";
 
 export const metadata: Metadata = {
   title: "Blog | Héctor León — Desarrollo de Sistemas Empresariales",
@@ -13,11 +13,21 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://hleon.dev/blog",
   },
+  alternates: {
+    canonical: "https://hleon.dev/blog",
+  },
 };
 
-export default function BlogPage() {
-  const posts = getPosts();
-  const categorias = getCategorias();
+export default async function BlogPage() {
+  const posts = await getPostsPublicados();
+  const categorias = Array.from(
+    new Map(
+      posts
+        .map((p) => p.categoria)
+        .filter((c): c is NonNullable<typeof c> => Boolean(c))
+        .map((c) => [c.id, c] as const)
+    ).values()
+  ).sort((a, b) => a.nombre.localeCompare(b.nombre));
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -74,11 +84,11 @@ export default function BlogPage() {
               </Link>
               {categorias.map((cat) => (
                 <Link
-                  key={cat}
-                  href={`/blog/categoria/${encodeURIComponent(cat.toLowerCase())}`}
+                  key={cat.id}
+                  href={`/blog/categoria/${cat.slug}`}
                   className="px-4 py-2 rounded-lg bg-slate-800/60 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-600 text-sm transition-all"
                 >
-                  {cat}
+                  {cat.nombre}
                 </Link>
               ))}
             </div>
@@ -102,30 +112,36 @@ export default function BlogPage() {
                   href={`/blog/${post.slug}`}
                   className="group bg-slate-900/50 border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-6 flex flex-col gap-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/5"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-full">
-                      {post.categoria}
-                    </span>
-                  </div>
+                  {post.categoria && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-full">
+                        {post.categoria.nombre}
+                      </span>
+                    </div>
+                  )}
                   <h2 className="text-white font-semibold text-lg leading-snug group-hover:text-indigo-300 transition-colors">
                     {post.titulo}
                   </h2>
                   <p className="text-slate-400 text-sm leading-relaxed flex-1">{post.resumen}</p>
-                  <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-800">
-                    {post.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="text-xs text-slate-500 bg-slate-800/70 px-2 py-0.5 rounded">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
+                  {post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-800">
+                      {post.tags.slice(0, 3).map((tag) => (
+                        <span key={tag} className="text-xs text-slate-500 bg-slate-800/70 px-2 py-0.5 rounded">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
-                    <time dateTime={post.fechaPublicacion}>
-                      {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </time>
+                    {post.fechaPublicacion && (
+                      <time dateTime={post.fechaPublicacion}>
+                        {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </time>
+                    )}
                     <span className="text-indigo-400 group-hover:translate-x-0.5 transition-transform">Leer →</span>
                   </div>
                 </Link>

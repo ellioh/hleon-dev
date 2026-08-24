@@ -1,13 +1,21 @@
 import type { MetadataRoute } from "next";
-import { getPosts, getCategorias } from "@/lib/blog";
+import { getPostsPublicados } from "@/lib/posts-api";
 import { getProyectosPublicados } from "@/lib/proyectos-api";
 
 const BASE_URL = "https://hleon.dev";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = getPosts();
-  const categorias = getCategorias();
+  const posts = await getPostsPublicados();
   const proyectos = await getProyectosPublicados();
+
+  const categorias = Array.from(
+    new Map(
+      posts
+        .map((p) => p.categoria)
+        .filter((c): c is NonNullable<typeof c> => Boolean(c))
+        .map((c) => [c.id, c] as const)
+    ).values()
+  );
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
@@ -19,13 +27,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const postPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
-    lastModified: new Date(post.fechaActualizacion),
+    lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
 
   const categoriaPages: MetadataRoute.Sitemap = categorias.map((cat) => ({
-    url: `${BASE_URL}/blog/categoria/${encodeURIComponent(cat.toLowerCase())}`,
+    url: `${BASE_URL}/blog/categoria/${cat.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.6,

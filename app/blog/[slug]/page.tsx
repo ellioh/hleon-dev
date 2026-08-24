@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getPost, getPosts } from "@/lib/blog";
+import { getPostPorSlug, getPostsPublicados } from "@/lib/posts-api";
 import { renderMarkdown } from "@/lib/markdown";
 
 interface Props {
@@ -9,71 +10,97 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return getPosts().map((post) => ({ slug: post.slug }));
+  const posts = await getPostsPublicados();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPostPorSlug(slug);
   if (!post) return { title: "Artículo no encontrado" };
 
+  const seo = post.seo;
+  const titulo = seo?.metaTitulo || post.titulo;
+  const descripcion = seo?.metaDescripcion || post.resumen;
+  const canonical = seo?.canonicalUrl || `https://hleon.dev/blog/${post.slug}`;
+  const ogImagen = seo?.ogImagen?.url ?? post.imagenDestacada?.url;
+  const twitterImagen = seo?.twitterImagen?.url ?? ogImagen;
+  const nombreAutor = post.autor?.nombre ?? "Héctor León";
+
   return {
-    title: post.titulo,
-    description: post.metaDescripcion,
+    title: seo?.metaTitulo ? { absolute: seo.metaTitulo } : post.titulo,
+    description: descripcion,
     keywords: post.tags,
-    authors: [{ name: "Héctor León", url: "https://hleon.dev" }],
+    authors: [{ name: nombreAutor, url: "https://hleon.dev" }],
+    robots: {
+      index: seo?.robotsIndex ?? true,
+      follow: seo?.robotsFollow ?? true,
+    },
     openGraph: {
-      title: post.titulo,
-      description: post.metaDescripcion,
+      title: seo?.ogTitulo || titulo,
+      description: seo?.ogDescripcion || descripcion,
       type: "article",
-      url: `https://hleon.dev/blog/${post.slug}`,
-      publishedTime: post.fechaPublicacion,
+      url: canonical,
+      publishedTime: post.fechaPublicacion ?? undefined,
       modifiedTime: post.fechaActualizacion,
-      section: post.categoria,
+      section: post.categoria?.nombre,
       tags: post.tags,
+      images: ogImagen ? [{ url: ogImagen }] : undefined,
     },
     twitter: {
-      card: "summary_large_image",
-      title: post.titulo,
-      description: post.metaDescripcion,
+      card: (seo?.twitterCard as "summary" | "summary_large_image") || "summary_large_image",
+      title: seo?.twitterTitulo || titulo,
+      description: seo?.twitterDescripcion || descripcion,
+      images: twitterImagen ? [twitterImagen] : undefined,
     },
     alternates: {
-      canonical: `https://hleon.dev/blog/${post.slug}`,
+      canonical,
     },
   };
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPostPorSlug(slug);
   if (!post) notFound();
 
-  const relatedPosts = getPosts()
-    .filter((p) => p.slug !== slug && p.categoria === post.categoria)
+  const todos = await getPostsPublicados();
+  const relatedPosts = todos
+    .filter((p) => p.slug !== slug && p.categoria?.id === post.categoria?.id)
     .slice(0, 3);
+
+  const urlCanonica = `https://hleon.dev/blog/${post.slug}`;
+  const nombreAutor = post.autor?.nombre ?? "Héctor León";
+  const tituloAutor = post.autor?.tituloProfesional ?? "Ingeniero de Software · Especialista en Sistemas Empresariales";
+  const inicialesAutor = nombreAutor
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.titulo,
-    description: post.metaDescripcion,
+    description: post.seo?.metaDescripcion || post.resumen,
     keywords: post.tags.join(", "),
     datePublished: post.fechaPublicacion,
     dateModified: post.fechaActualizacion,
     author: {
       "@type": "Person",
-      name: "Héctor León",
+      name: nombreAutor,
       url: "https://hleon.dev",
-      jobTitle: "Desarrollador de Software Empresarial",
+      jobTitle: tituloAutor,
     },
     publisher: {
       "@type": "Person",
-      name: "Héctor León",
+      name: nombreAutor,
       url: "https://hleon.dev",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://hleon.dev/blog/${post.slug}`,
+      "@id": urlCanonica,
     },
   };
 
@@ -121,31 +148,39 @@ export default async function BlogPostPage({ params }: Props) {
             <Link href="/" className="hover:text-slate-300 transition-colors">Inicio</Link>
             <span>/</span>
             <Link href="/blog" className="hover:text-slate-300 transition-colors">Blog</Link>
-            <span>/</span>
-            <Link
-              href={`/blog/categoria/${encodeURIComponent(post.categoria.toLowerCase())}`}
-              className="hover:text-slate-300 transition-colors"
-            >
-              {post.categoria}
-            </Link>
+            {post.categoria && (
+              <>
+                <span>/</span>
+                <Link
+                  href={`/blog/categoria/${encodeURIComponent(post.categoria.nombre.toLowerCase())}`}
+                  className="hover:text-slate-300 transition-colors"
+                >
+                  {post.categoria.nombre}
+                </Link>
+              </>
+            )}
           </nav>
 
           {/* Post header */}
           <header className="mb-10">
-            <div className="flex items-center gap-3 mb-5">
-              <Link
-                href={`/blog/categoria/${encodeURIComponent(post.categoria.toLowerCase())}`}
-                className="text-sm font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full hover:bg-indigo-500/20 transition-colors"
-              >
-                {post.categoria}
-              </Link>
-              <time dateTime={post.fechaPublicacion} className="text-slate-500 text-sm">
-                {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
+            <div className="flex items-center gap-3 mb-5 flex-wrap">
+              {post.categoria && (
+                <Link
+                  href={`/blog/categoria/${encodeURIComponent(post.categoria.nombre.toLowerCase())}`}
+                  className="text-sm font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full hover:bg-indigo-500/20 transition-colors"
+                >
+                  {post.categoria.nombre}
+                </Link>
+              )}
+              {post.fechaPublicacion && (
+                <time dateTime={post.fechaPublicacion} className="text-slate-500 text-sm">
+                  {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+              )}
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
@@ -154,14 +189,33 @@ export default async function BlogPostPage({ params }: Props) {
             <p className="text-lg text-slate-400 leading-relaxed">{post.resumen}</p>
           </header>
 
+          {post.imagenDestacada && (
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-slate-800 mb-10">
+              <Image
+                src={post.imagenDestacada.url}
+                alt={post.imagenDestacada.altText ?? post.titulo}
+                fill
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
+                priority
+              />
+            </div>
+          )}
+
           {/* Author */}
           <div className="flex items-center gap-4 py-5 border-y border-slate-800/70 mb-10">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
-              HL
-            </div>
+            {post.autor?.foto ? (
+              <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0">
+                <Image src={post.autor.foto.url} alt={nombreAutor} fill sizes="48px" className="object-cover" />
+              </div>
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                {inicialesAutor}
+              </div>
+            )}
             <div>
-              <p className="text-white font-semibold text-sm">Héctor León</p>
-              <p className="text-slate-400 text-xs">Ingeniero de Software · Especialista en Sistemas Empresariales</p>
+              <p className="text-white font-semibold text-sm">{nombreAutor}</p>
+              <p className="text-slate-400 text-xs">{tituloAutor}</p>
             </div>
           </div>
 
@@ -218,7 +272,7 @@ export default async function BlogPostPage({ params }: Props) {
                   href={`/blog/${p.slug}`}
                   className="group bg-slate-900/50 border border-slate-800 hover:border-indigo-500/40 rounded-xl p-5 transition-all hover:-translate-y-0.5"
                 >
-                  <span className="text-xs text-indigo-400 mb-2 block">{p.categoria}</span>
+                  {p.categoria && <span className="text-xs text-indigo-400 mb-2 block">{p.categoria.nombre}</span>}
                   <h3 className="text-white text-sm font-medium leading-snug group-hover:text-indigo-300 transition-colors">
                     {p.titulo}
                   </h3>

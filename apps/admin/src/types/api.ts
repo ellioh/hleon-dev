@@ -157,6 +157,60 @@ export interface Experiencia {
   eliminadoEn: string | null;
 }
 
+export type NivelIngles = "basico" | "intermedio" | "avanzado" | "profesional" | "nativo";
+export type Disponibilidad = "abierto_remoto" | "abierto_proyectos" | "abierto_ambos" | "no_disponible";
+
+/** Singleton - GET /api/admin/perfil devuelve `{data: null}` hasta que se guarde la primera vez. */
+export interface Perfil {
+  id: number;
+  nombreCompleto: string;
+  nombrePublico: string | null;
+  tituloProfesional: string;
+  bioCorta: string;
+  bioLarga: string;
+  foto: MediaItem | null;
+  email: string;
+  ubicacion: string;
+  nivelIngles: NivelIngles;
+  disponibilidad: Disponibilidad;
+  mensajeDisponibilidad: string | null;
+  anosExperiencia: number;
+  cvGeneralId: number | null;
+  actualizadoEn: string;
+}
+
+export interface Autor {
+  nombre: string;
+  tituloProfesional: string;
+  foto: MediaItem | null;
+}
+
+export type TipoAudiencia = "consultoria" | "carrera_arquitectura" | "ambos";
+
+/** Forma "tarjeta" - la que devuelve el listado (PostSummaryResource). */
+export interface PostSummary {
+  id: number;
+  titulo: string;
+  slug: string;
+  resumen: string;
+  categoria: Categoria | null;
+  autor: Autor | null;
+  tipoAudiencia: TipoAudiencia;
+  tags: string[];
+  imagenDestacada: MediaItem | null;
+  publicado: boolean;
+  fechaPublicacion: string | null;
+  eliminadoEn: string | null;
+}
+
+/** Forma "detalle" completa (PostResource). */
+export interface Post extends PostSummary {
+  contenido: string;
+  seo: SeoData | null;
+  fechaActualizacion: string;
+  creadoEn: string;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {

@@ -1,44 +1,58 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCategorias, getPostsByCategoria } from "@/lib/blog";
+import { getPostsPublicados } from "@/lib/posts-api";
 
 interface Props {
   params: Promise<{ categoria: string }>;
 }
 
+async function getCategorias() {
+  const posts = await getPostsPublicados();
+  return Array.from(
+    new Map(
+      posts
+        .map((p) => p.categoria)
+        .filter((c): c is NonNullable<typeof c> => Boolean(c))
+        .map((c) => [c.id, c] as const)
+    ).values()
+  ).sort((a, b) => a.nombre.localeCompare(b.nombre));
+}
+
 export async function generateStaticParams() {
-  return getCategorias().map((cat) => ({ categoria: cat.toLowerCase() }));
+  const categorias = await getCategorias();
+  return categorias.map((cat) => ({ categoria: cat.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { categoria } = await params;
-  const decoded = decodeURIComponent(categoria);
-  const cats = getCategorias().map((c) => c.toLowerCase());
-  if (!cats.includes(decoded)) return { title: "Categoría no encontrada" };
-
-  const displayName = getCategorias().find((c) => c.toLowerCase() === decoded) ?? decoded;
+  const categorias = await getCategorias();
+  const encontrada = categorias.find((c) => c.slug === categoria);
+  if (!encontrada) return { title: "Categoría no encontrada" };
 
   return {
-    title: `${displayName} — Blog`,
-    description: `Artículos sobre ${displayName} — desarrollo de software empresarial, sistemas a medida y digitalización de empresas.`,
+    title: `${encontrada.nombre} — Blog`,
+    description: `Artículos sobre ${encontrada.nombre} — desarrollo de software empresarial, sistemas a medida y digitalización de empresas.`,
     openGraph: {
-      title: `${displayName} — Blog de Héctor León`,
-      description: `Artículos sobre ${displayName} en el blog de Héctor León, especialista en sistemas empresariales.`,
+      title: `${encontrada.nombre} — Blog de Héctor León`,
+      description: `Artículos sobre ${encontrada.nombre} en el blog de Héctor León, especialista en sistemas empresariales.`,
       type: "website",
+    },
+    alternates: {
+      canonical: `https://hleon.dev/blog/categoria/${encontrada.slug}`,
     },
   };
 }
 
 export default async function CategoriaPage({ params }: Props) {
   const { categoria } = await params;
-  const decoded = decodeURIComponent(categoria);
-  const allCats = getCategorias();
-  const displayName = allCats.find((c) => c.toLowerCase() === decoded);
+  const todos = await getPostsPublicados();
+  const allCats = await getCategorias();
+  const encontrada = allCats.find((c) => c.slug === categoria);
 
-  if (!displayName) notFound();
+  if (!encontrada) notFound();
 
-  const posts = getPostsByCategoria(displayName);
+  const posts = todos.filter((p) => p.categoria?.id === encontrada.id);
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -77,10 +91,10 @@ export default async function CategoriaPage({ params }: Props) {
             <span>/</span>
             <Link href="/blog" className="hover:text-slate-300 transition-colors">Blog</Link>
             <span>/</span>
-            <span className="text-slate-400">{displayName}</span>
+            <span className="text-slate-400">{encontrada.nombre}</span>
           </nav>
 
-          <h1 className="text-4xl font-bold text-white mb-2">{displayName}</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">{encontrada.nombre}</h1>
           <p className="text-slate-400 mb-4">
             {posts.length} {posts.length === 1 ? "artículo" : "artículos"} en esta categoría
           </p>
@@ -95,15 +109,15 @@ export default async function CategoriaPage({ params }: Props) {
             </Link>
             {allCats.map((cat) => (
               <Link
-                key={cat}
-                href={`/blog/categoria/${encodeURIComponent(cat.toLowerCase())}`}
+                key={cat.id}
+                href={`/blog/categoria/${cat.slug}`}
                 className={`px-4 py-2 rounded-lg border text-sm transition-all ${
-                  cat === displayName
+                  cat.id === encontrada.id
                     ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-300 font-medium"
                     : "bg-slate-800/60 border-slate-700 text-slate-400 hover:text-white hover:border-slate-600"
                 }`}
               >
-                {cat}
+                {cat.nombre}
               </Link>
             ))}
           </div>
@@ -123,13 +137,15 @@ export default async function CategoriaPage({ params }: Props) {
                   </h2>
                   <p className="text-slate-400 text-sm leading-relaxed flex-1">{post.resumen}</p>
                   <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-800">
-                    <time dateTime={post.fechaPublicacion}>
-                      {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </time>
+                    {post.fechaPublicacion && (
+                      <time dateTime={post.fechaPublicacion}>
+                        {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </time>
+                    )}
                     <span className="text-indigo-400 group-hover:translate-x-0.5 transition-transform">Leer →</span>
                   </div>
                 </Link>

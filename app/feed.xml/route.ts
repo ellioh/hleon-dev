@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/blog";
+import { getPostsPublicados } from "@/lib/posts-api";
 
 const BASE_URL = "https://hleon.dev";
 
@@ -12,7 +12,8 @@ function escapeXml(text: string): string {
 }
 
 export async function GET() {
-  const posts = getPosts();
+  const posts = await getPostsPublicados();
+  const nombreAutor = posts[0]?.autor?.nombre ?? "Héctor León";
 
   const items = posts
     .slice(0, 20)
@@ -22,11 +23,11 @@ export async function GET() {
       <title>${escapeXml(post.titulo)}</title>
       <link>${BASE_URL}/blog/${post.slug}</link>
       <guid isPermaLink="true">${BASE_URL}/blog/${post.slug}</guid>
-      <description>${escapeXml(post.metaDescripcion || post.resumen)}</description>
-      <pubDate>${new Date(post.fechaPublicacion).toUTCString()}</pubDate>
-      <category>${escapeXml(post.categoria)}</category>
+      <description>${escapeXml(post.resumen)}</description>
+      ${post.fechaPublicacion ? `<pubDate>${new Date(post.fechaPublicacion).toUTCString()}</pubDate>` : ""}
+      ${post.categoria ? `<category>${escapeXml(post.categoria.nombre)}</category>` : ""}
       ${post.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join("\n      ")}
-      <author>hector@hleon.dev (Héctor León)</author>
+      <author>hector@hleon.dev (${escapeXml(post.autor?.nombre ?? nombreAutor)})</author>
     </item>`
     )
     .join("");
@@ -34,12 +35,12 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Blog de Héctor León — Sistemas Empresariales</title>
+    <title>Blog de ${escapeXml(nombreAutor)} — Sistemas Empresariales</title>
     <link>${BASE_URL}</link>
     <description>Artículos sobre desarrollo de software empresarial, ERP, APIs y transformación digital para empresas en Perú y Latinoamérica.</description>
     <language>es-PE</language>
-    <managingEditor>hector@hleon.dev (Héctor León)</managingEditor>
-    <webMaster>hector@hleon.dev (Héctor León)</webMaster>
+    <managingEditor>hector@hleon.dev (${escapeXml(nombreAutor)})</managingEditor>
+    <webMaster>hector@hleon.dev (${escapeXml(nombreAutor)})</webMaster>
     <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     ${items}

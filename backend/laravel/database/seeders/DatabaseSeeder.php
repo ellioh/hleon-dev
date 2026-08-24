@@ -14,6 +14,10 @@ class DatabaseSeeder extends Seeder
         // Independiente del admin: taxonomía + los 4 proyectos reales
         // migrados de data/proyectos.json (ver ProyectoSeeder).
         $this->call(ProyectoSeeder::class);
+
+        // Los 3 artículos reales solo se migran si ya existe un Perfil
+        // (autor_id obligatorio, nunca se fabrica - ver PostSeeder).
+        $this->call(PostSeeder::class);
     }
 
     /**

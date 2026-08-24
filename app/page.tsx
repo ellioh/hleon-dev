@@ -1,5 +1,5 @@
 import { getProyectos } from "@/lib/data";
-import { getPosts } from "@/lib/blog";
+import { getPostsPublicados } from "@/lib/posts-api";
 import Link from "next/link";
 
 // Actualiza estas URLs con tus perfiles reales
@@ -105,7 +105,7 @@ const testimonials = [
 export default async function Home() {
   const proyectos = getProyectos();
   const destacados = proyectos.filter((p) => p.destacado).slice(0, 3);
-  const recentPosts = getPosts().slice(0, 3);
+  const recentPosts = (await getPostsPublicados()).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -422,21 +422,25 @@ export default async function Home() {
                   href={`/blog/${post.slug}`}
                   className="group bg-slate-900/50 border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-6 flex flex-col gap-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/5"
                 >
-                  <span className="text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-full w-fit">
-                    {post.categoria}
-                  </span>
+                  {post.categoria && (
+                    <span className="text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-full w-fit">
+                      {post.categoria.nombre}
+                    </span>
+                  )}
                   <h3 className="text-white font-semibold leading-snug group-hover:text-indigo-300 transition-colors">
                     {post.titulo}
                   </h3>
                   <p className="text-slate-400 text-sm leading-relaxed flex-1">{post.resumen}</p>
                   <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-800">
-                    <time dateTime={post.fechaPublicacion}>
-                      {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </time>
+                    {post.fechaPublicacion && (
+                      <time dateTime={post.fechaPublicacion}>
+                        {new Date(post.fechaPublicacion).toLocaleDateString("es-PE", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </time>
+                    )}
                     <span className="text-indigo-400 group-hover:translate-x-0.5 transition-transform">Leer →</span>
                   </div>
                 </Link>

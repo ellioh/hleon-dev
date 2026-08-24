@@ -1,12 +1,12 @@
-import type { ProyectoFormValues } from "@/features/proyectos/proyecto-schema";
+import type { SeoFormValues } from "@/lib/seo-schema";
 
 /**
- * El resto de la API responde en camelCase (ver ProyectoResource /
- * SeoResource), pero los Form Requests de Laravel validan `seo.*` en
- * snake_case (convención estándar de Laravel). Este es el único punto de
- * conversión - se usa al enviar, nunca al leer.
+ * El resto de la API responde en camelCase (ver SeoResource), pero los
+ * Form Requests de Laravel validan `seo.*` en snake_case (convención
+ * estándar de Laravel). Este es el único punto de conversión - se usa al
+ * enviar, nunca al leer.
  */
-export function seoFormToPayload(seo: ProyectoFormValues["seo"]) {
+export function seoFormToPayload(seo: SeoFormValues) {
   return {
     meta_titulo: seo.metaTitulo,
     meta_descripcion: seo.metaDescripcion,

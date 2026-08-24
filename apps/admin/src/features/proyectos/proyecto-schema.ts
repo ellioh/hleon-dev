@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { seoSchema, seoValoresVacios } from "@/lib/seo-schema";
 
 /**
  * Espejo de StoreProyectoRequest/UpdateProyectoRequest de Laravel.
@@ -37,19 +38,7 @@ export const proyectoSchema = z.object({
   orden: z.number(),
   visible: z.boolean(),
   tecnologia_ids: z.array(z.number()).min(1, "Selecciona al menos una tecnología"),
-  seo: z.object({
-    metaTitulo: z.string().max(160).nullable(),
-    metaDescripcion: z.string().max(160).nullable(),
-    canonicalUrl: z.union([z.literal(""), z.string().url()]).nullable(),
-    robotsIndex: z.boolean(),
-    robotsFollow: z.boolean(),
-    ogTitulo: z.string().max(160).nullable(),
-    ogDescripcion: z.string().max(200).nullable(),
-    ogTipo: z.string(),
-    twitterCard: z.enum(["summary", "summary_large_image"]),
-    twitterTitulo: z.string().max(160).nullable(),
-    twitterDescripcion: z.string().max(200).nullable(),
-  }),
+  seo: seoSchema,
 });
 
 export type ProyectoFormValues = z.infer<typeof proyectoSchema>;
@@ -77,17 +66,5 @@ export const valoresVacios: ProyectoFormValues = {
   orden: 0,
   visible: true,
   tecnologia_ids: [],
-  seo: {
-    metaTitulo: null,
-    metaDescripcion: null,
-    canonicalUrl: null,
-    robotsIndex: true,
-    robotsFollow: true,
-    ogTitulo: null,
-    ogDescripcion: null,
-    ogTipo: "website",
-    twitterCard: "summary_large_image",
-    twitterTitulo: null,
-    twitterDescripcion: null,
-  },
+  seo: seoValoresVacios,
 };
