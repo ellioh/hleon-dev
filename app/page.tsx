@@ -137,6 +137,9 @@ export default async function Home() {
               <Link href="/portafolio" className="text-slate-400 hover:text-white text-sm transition-colors">
                 Todos los proyectos
               </Link>
+              <Link href="/trayectoria" className="text-slate-400 hover:text-white text-sm transition-colors">
+                Trayectoria
+              </Link>
             </div>
             <Link
               href="/contacto"
@@ -530,6 +533,7 @@ export default async function Home() {
             <div className="flex flex-wrap gap-6 text-sm text-slate-400">
               <Link href="#servicios" className="hover:text-white transition-colors">Servicios</Link>
               <Link href="/portafolio" className="hover:text-white transition-colors">Portafolio</Link>
+              <Link href="/trayectoria" className="hover:text-white transition-colors">Trayectoria</Link>
               <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
               <Link href="#proceso" className="hover:text-white transition-colors">Proceso</Link>
               <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>

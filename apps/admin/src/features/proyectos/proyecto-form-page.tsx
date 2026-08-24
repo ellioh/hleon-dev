@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FormField, FormSection } from "@/components/shared/form-section";
 import { CategorySelector } from "@/components/shared/category-selector";
+import { OrganizacionSelector } from "@/components/shared/organizacion-selector";
 import { TechnologySelector } from "@/components/shared/technology-selector";
 import { ImageUploader } from "@/components/shared/image-uploader";
 import { GalleryUploader } from "@/components/shared/gallery-uploader";
@@ -161,6 +162,20 @@ export function ProyectoFormPage() {
               </FormField>
               <FormField label="URL pública" htmlFor="url_publica" hint="Si el proyecto tiene un sitio en vivo." error={form.formState.errors.url_publica?.message}>
                 <Input id="url_publica" type="url" placeholder="https://..." {...form.register("url_publica")} />
+              </FormField>
+              <FormField label="Organización (cliente)" htmlFor="organizacion_id" hint="Déjalo sin asignar si no aplica.">
+                <div className="flex items-center gap-3">
+                  <OrganizacionSelector
+                    tipo="cliente"
+                    value={form.watch("organizacion_id")}
+                    onChange={(id) => form.setValue("organizacion_id", id)}
+                  />
+                  {form.watch("organizacion_id") !== null && (
+                    <Button type="button" variant="ghost" size="sm" onClick={() => form.setValue("organizacion_id", null)}>
+                      Quitar
+                    </Button>
+                  )}
+                </div>
               </FormField>
             </FormSection>
 

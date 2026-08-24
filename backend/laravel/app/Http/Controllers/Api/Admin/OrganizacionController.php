@@ -13,9 +13,19 @@ use Illuminate\Http\Request;
  */
 class OrganizacionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Organizacion::query()->orderBy('orden')->get(['id', 'nombre', 'tipo', 'rubro']);
+        $query = Organizacion::query()->orderBy('orden');
+
+        // ?tipo=empleador trae también 'ambos' - una organización marcada
+        // como ambos es válida tanto para Proyecto (cliente) como para
+        // Experiencia (empleador), nunca hay que filtrarla fuera de una
+        // de las dos vistas.
+        if ($tipo = $request->query('tipo')) {
+            $query->whereIn('tipo', [$tipo, 'ambos']);
+        }
+
+        return $query->get(['id', 'nombre', 'tipo', 'rubro']);
     }
 
     public function store(Request $request)

@@ -1,13 +1,14 @@
 import { NavLink } from "react-router-dom";
-import { FolderKanban, LayoutDashboard, LogOut } from "lucide-react";
+import { Briefcase, FolderKanban, LayoutDashboard, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/proyectos", label: "Proyectos", icon: FolderKanban, end: false },
-  // Experience/Blog/Servicios/Certificaciones se agregan aquí con el
-  // mismo patrón cuando existan - sin tocar el resto del shell.
+  { to: "/experiencia", label: "Experiencia", icon: Briefcase, end: false },
+  // Blog/Servicios/Certificaciones se agregan aquí con el mismo patrón
+  // cuando existan - sin tocar el resto del shell.
 ];
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {

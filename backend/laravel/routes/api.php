@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\ExperienciaController as AdminExperienciaController;
 use App\Http\Controllers\Api\Admin\MediaController;
 use App\Http\Controllers\Api\Admin\OrganizacionController;
 use App\Http\Controllers\Api\Admin\ProyectoController as AdminProyectoController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriaController;
+use App\Http\Controllers\Api\ExperienciaController;
 use App\Http\Controllers\Api\ProyectoController;
 use App\Http\Controllers\Api\TecnologiaController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // --- Público (consumido por apps/web) ---
 Route::get('/proyectos', [ProyectoController::class, 'index']);
 Route::get('/proyectos/{slug}', [ProyectoController::class, 'show']);
+Route::get('/experiencias', [ExperienciaController::class, 'index']);
 Route::get('/categorias', [CategoriaController::class, 'index']);
 Route::get('/tecnologias', [TecnologiaController::class, 'index']);
 
@@ -36,6 +39,15 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/proyectos/{proyecto}/publicar', [AdminProyectoController::class, 'publicar']);
     Route::post('/proyectos/{proyecto}/despublicar', [AdminProyectoController::class, 'despublicar']);
     Route::put('/proyectos/{proyecto}/galeria', [AdminProyectoController::class, 'actualizarGaleria']);
+
+    Route::get('/experiencias', [AdminExperienciaController::class, 'index']);
+    Route::post('/experiencias', [AdminExperienciaController::class, 'store']);
+    Route::get('/experiencias/{experiencia}', [AdminExperienciaController::class, 'show'])->withTrashed();
+    Route::put('/experiencias/{experiencia}', [AdminExperienciaController::class, 'update']);
+    Route::delete('/experiencias/{experiencia}', [AdminExperienciaController::class, 'destroy']);
+    Route::post('/experiencias/{id}/restaurar', [AdminExperienciaController::class, 'restore']);
+    Route::post('/experiencias/{experiencia}/publicar', [AdminExperienciaController::class, 'publicar']);
+    Route::post('/experiencias/{experiencia}/despublicar', [AdminExperienciaController::class, 'despublicar']);
 
     Route::post('/media', [MediaController::class, 'store']);
     Route::delete('/media/{media}', [MediaController::class, 'destroy']);

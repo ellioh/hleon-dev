@@ -30,6 +30,16 @@ export interface Organizacion {
   url: string | null;
 }
 
+export type TipoOrganizacion = "cliente" | "empleador" | "ambos";
+
+/** Forma de GET/POST /api/admin/organizaciones - distinta de `Organizacion` (que es la lectura pública, ya enmascarada). */
+export interface OrganizacionAdmin {
+  id: number;
+  nombre: string;
+  tipo: TipoOrganizacion;
+  rubro: string | null;
+}
+
 export interface Tecnologia {
   id: number;
   nombre: string;
@@ -113,6 +123,38 @@ export interface Proyecto extends Omit<ProyectoSummary, "tecnologias"> {
   seo: SeoData | null;
   creadoEn: string;
   actualizadoEn: string;
+}
+
+export type ModalidadExperiencia = "remoto" | "presencial" | "hibrido" | "freelance";
+
+export interface ExperienciaLogro {
+  id: number;
+  texto: string;
+  orden: number;
+}
+
+/** Forma única (ExperienciaResource) - sin split lista/detalle, ver ADR 0007. */
+export interface Experiencia {
+  id: number;
+  organizacion: Organizacion | null;
+  rol: string;
+  modalidad: ModalidadExperiencia;
+  fechaInicio: string;
+  fechaFin: string | null;
+  actual: boolean;
+  resumen: string;
+  descripcion: string;
+  ubicacion: string | null;
+  logros: ExperienciaLogro[];
+  tecnologias: Tecnologia[];
+  proyectos: ProyectoSummary[];
+  destacado: boolean;
+  orden: number;
+  visible: boolean;
+  estadoPublicacion: EstadoPublicacion;
+  creadoEn: string;
+  actualizadoEn: string;
+  eliminadoEn: string | null;
 }
 
 export interface PaginatedResponse<T> {

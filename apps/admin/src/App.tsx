@@ -4,6 +4,8 @@ import { ProtectedRoute } from "@/components/layout/protected-route";
 import { DashboardPage } from "@/features/dashboard/dashboard-page";
 import { ProyectosListPage } from "@/features/proyectos/proyectos-list-page";
 import { ProyectoFormPage } from "@/features/proyectos/proyecto-form-page";
+import { ExperienciasListPage } from "@/features/experiencia/experiencias-list-page";
+import { ExperienciaFormPage } from "@/features/experiencia/experiencia-form-page";
 
 function App() {
   return (
@@ -15,8 +17,11 @@ function App() {
         <Route path="/proyectos" element={<ProyectosListPage />} />
         <Route path="/proyectos/nuevo" element={<ProyectoFormPage />} />
         <Route path="/proyectos/:id" element={<ProyectoFormPage />} />
-        {/* Experience/Blog/Servicios/Certificaciones se agregan aquí con
-            el mismo patrón (lista + :id) cuando existan. */}
+        <Route path="/experiencia" element={<ExperienciasListPage />} />
+        <Route path="/experiencia/nuevo" element={<ExperienciaFormPage />} />
+        <Route path="/experiencia/:id" element={<ExperienciaFormPage />} />
+        {/* Blog/Servicios/Certificaciones se agregan aquí con el mismo
+            patrón (lista + :id) cuando existan. */}
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('experiencias', function (Blueprint $table) {
             $table->id();
-            $table->string('empresa', 120);
+            $table->foreignId('organizacion_id')->constrained('organizaciones');
             $table->string('rol', 120);
             $table->enum('modalidad', ['remoto', 'presencial', 'hibrido', 'freelance']);
             $table->date('fecha_inicio');
