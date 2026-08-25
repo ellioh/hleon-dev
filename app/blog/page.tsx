@@ -42,7 +42,7 @@ export default async function BlogPage() {
               hleon.dev
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <Link href="/#servicios" className="text-slate-400 hover:text-white text-sm transition-colors">Servicios</Link>
+              <Link href="/servicios" className="text-slate-400 hover:text-white text-sm transition-colors">Servicios</Link>
               <Link href="/portafolio" className="text-slate-400 hover:text-white text-sm transition-colors">Portafolio</Link>
               <Link href="/trayectoria" className="text-slate-400 hover:text-white text-sm transition-colors">Trayectoria</Link>
               <Link href="/blog" className="text-white text-sm font-medium">Blog</Link>
@@ -173,6 +173,7 @@ export default async function BlogPage() {
           </span>
           <div className="flex gap-6 text-sm text-slate-400">
             <Link href="/" className="hover:text-white transition-colors">Inicio</Link>
+            <Link href="/servicios" className="hover:text-white transition-colors">Servicios</Link>
             <Link href="/portafolio" className="hover:text-white transition-colors">Portafolio</Link>
             <Link href="/trayectoria" className="hover:text-white transition-colors">Trayectoria</Link>
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>

@@ -211,6 +211,43 @@ export interface Post extends PostSummary {
   creadoEn: string;
 }
 
+export type Moneda = "USD" | "PEN";
+
+export interface ServicioEntregable {
+  id: number;
+  texto: string;
+  orden: number;
+}
+
+/** Forma "tarjeta" - la que devuelve el listado (ServicioSummaryResource). */
+export interface ServicioSummary {
+  id: number;
+  nombre: string;
+  slug: string;
+  iconoEmoji: string | null;
+  resumenBreve: string;
+  categoria: Categoria | null;
+  rangoPrecioMin: string | null;
+  rangoPrecioMax: string | null;
+  moneda: Moneda | null;
+  tiempoEstimado: string | null;
+  visible: boolean;
+  destacado: boolean;
+  orden: number;
+  eliminadoEn: string | null;
+}
+
+/** Forma "detalle" completa (ServicioResource). Sin estadoPublicacion/publicado - solo `visible` (ver ADR de Servicios). */
+export interface Servicio extends Omit<ServicioSummary, "eliminadoEn"> {
+  descripcionCompleta: string;
+  proyectoEjemplo: ProyectoSummary | null;
+  entregables: ServicioEntregable[];
+  seo: SeoData | null;
+  creadoEn: string;
+  actualizadoEn: string;
+  eliminadoEn: string | null;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {

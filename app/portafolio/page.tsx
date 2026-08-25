@@ -177,6 +177,7 @@ export default async function PortafolioPage() {
           </Link>
           <div className="flex gap-6 text-sm text-slate-400">
             <Link href="/" className="hover:text-white transition-colors">Inicio</Link>
+            <Link href="/servicios" className="hover:text-white transition-colors">Servicios</Link>
             <Link href="/portafolio" className="hover:text-white transition-colors">Portafolio</Link>
             <Link href="/trayectoria" className="hover:text-white transition-colors">Trayectoria</Link>
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>

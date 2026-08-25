@@ -6,11 +6,13 @@ use App\Http\Controllers\Api\Admin\OrganizacionController;
 use App\Http\Controllers\Api\Admin\PerfilController;
 use App\Http\Controllers\Api\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Api\Admin\ProyectoController as AdminProyectoController;
+use App\Http\Controllers\Api\Admin\ServicioController as AdminServicioController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\ExperienciaController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProyectoController;
+use App\Http\Controllers\Api\ServicioController;
 use App\Http\Controllers\Api\TecnologiaController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +32,8 @@ Route::get('/proyectos/{slug}', [ProyectoController::class, 'show']);
 Route::get('/experiencias', [ExperienciaController::class, 'index']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{slug}', [PostController::class, 'show']);
+Route::get('/servicios', [ServicioController::class, 'index']);
+Route::get('/servicios/{slug}', [ServicioController::class, 'show']);
 Route::get('/categorias', [CategoriaController::class, 'index']);
 Route::get('/tecnologias', [TecnologiaController::class, 'index']);
 
@@ -62,6 +66,13 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/posts/{id}/restaurar', [AdminPostController::class, 'restore']);
     Route::post('/posts/{post}/publicar', [AdminPostController::class, 'publicar']);
     Route::post('/posts/{post}/despublicar', [AdminPostController::class, 'despublicar']);
+
+    Route::get('/servicios', [AdminServicioController::class, 'index']);
+    Route::post('/servicios', [AdminServicioController::class, 'store']);
+    Route::get('/servicios/{servicio}', [AdminServicioController::class, 'show'])->withTrashed();
+    Route::put('/servicios/{servicio}', [AdminServicioController::class, 'update']);
+    Route::delete('/servicios/{servicio}', [AdminServicioController::class, 'destroy']);
+    Route::post('/servicios/{id}/restaurar', [AdminServicioController::class, 'restore']);
 
     Route::post('/media', [MediaController::class, 'store']);
     Route::delete('/media/{media}', [MediaController::class, 'destroy']);

@@ -67,7 +67,7 @@ export default async function CategoriaPage({ params }: Props) {
               hleon.dev
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <Link href="/#servicios" className="text-slate-400 hover:text-white text-sm transition-colors">Servicios</Link>
+              <Link href="/servicios" className="text-slate-400 hover:text-white text-sm transition-colors">Servicios</Link>
               <Link href="/portafolio" className="text-slate-400 hover:text-white text-sm transition-colors">Portafolio</Link>
               <Link href="/trayectoria" className="text-slate-400 hover:text-white text-sm transition-colors">Trayectoria</Link>
               <Link href="/blog" className="text-white text-sm font-medium">Blog</Link>

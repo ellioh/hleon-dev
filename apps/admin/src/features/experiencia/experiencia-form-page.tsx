@@ -17,7 +17,7 @@ import { TechnologySelector } from "@/components/shared/technology-selector";
 import { BlockLoadingState } from "@/components/shared/loading-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { ProyectoSelector } from "@/features/experiencia/proyecto-selector";
-import { LogrosEditor } from "@/features/experiencia/logros-editor";
+import { TextListEditor } from "@/components/shared/text-list-editor";
 import { experienciaSchema, valoresVacios, type ExperienciaFormValues } from "@/features/experiencia/experiencia-schema";
 import { experienciaToFormValues } from "@/features/experiencia/experiencia-mappers";
 import { useActualizarExperiencia, useCrearExperiencia, useExperiencia } from "@/features/experiencia/api";
@@ -182,7 +182,12 @@ export function ExperienciaFormPage() {
               </FormField>
             </FormSection>
             <FormSection title="Logros" description="Resultados concretos y medibles, uno por línea.">
-              <LogrosEditor value={form.watch("logros")} onChange={(logros) => form.setValue("logros", logros)} />
+              <TextListEditor
+                value={form.watch("logros")}
+                onChange={(logros) => form.setValue("logros", logros)}
+                itemLabel="logro"
+                placeholder="Ej: Reduje el tiempo de cierre contable de 5 a 2 días"
+              />
             </FormSection>
           </TabsContent>
 

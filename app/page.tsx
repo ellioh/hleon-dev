@@ -1,5 +1,6 @@
 import { getProyectos } from "@/lib/data";
 import { getPostsPublicados } from "@/lib/posts-api";
+import { getServiciosVisibles } from "@/lib/servicios-api";
 import Link from "next/link";
 
 // Actualiza estas URLs con tus perfiles reales
@@ -10,38 +11,6 @@ const SOCIAL = {
   github: "https://github.com/ellioh",
 };
 
-const services = [
-  {
-    icon: "🏭",
-    title: "ERP / Gestión Empresarial",
-    desc: "Sistemas integrales que unifican producción, inventario, finanzas y RRHH en una sola plataforma adaptada a tu empresa.",
-  },
-  {
-    icon: "🤝",
-    title: "CRM / Gestión de Clientes",
-    desc: "Controla tu pipeline de ventas, historial de clientes, seguimiento de oportunidades y automatización de comunicaciones.",
-  },
-  {
-    icon: "🛒",
-    title: "E-commerce / Tiendas Online",
-    desc: "Plataformas de venta online con catálogo, carrito, pagos integrados y gestión de pedidos en tiempo real.",
-  },
-  {
-    icon: "🔌",
-    title: "APIs e Integraciones",
-    desc: "Conecta tus sistemas existentes con APIs REST, webhooks e integraciones con terceros como facturación electrónica, pasarelas de pago.",
-  },
-  {
-    icon: "⚙️",
-    title: "Automatización de Procesos",
-    desc: "Elimina tareas manuales repetitivas con bots, scripts y flujos automatizados que ahorran tiempo y reducen errores.",
-  },
-  {
-    icon: "💡",
-    title: "Consultoría Técnica",
-    desc: "Auditoría de sistemas existentes, arquitectura de soluciones, elección de tecnología y hoja de ruta de digitalización.",
-  },
-];
 
 const steps = [
   {
@@ -106,6 +75,7 @@ export default async function Home() {
   const proyectos = getProyectos();
   const destacados = proyectos.filter((p) => p.destacado).slice(0, 3);
   const recentPosts = (await getPostsPublicados()).slice(0, 3);
+  const services = await getServiciosVisibles();
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -266,20 +236,33 @@ export default async function Home() {
               de tu negocio.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((s) => (
-              <div
-                key={s.title}
-                className="bg-slate-900/50 border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/5 group"
-              >
-                <div className="text-3xl mb-4">{s.icon}</div>
-                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-indigo-300 transition-colors">
-                  {s.title}
-                </h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{s.desc}</p>
+          {services.length > 0 && (
+            <>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {services.map((s) => (
+                  <Link
+                    key={s.id}
+                    href={`/servicios/${s.slug}`}
+                    className="bg-slate-900/50 border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/5 group"
+                  >
+                    {s.iconoEmoji && <div className="text-3xl mb-4">{s.iconoEmoji}</div>}
+                    <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-indigo-300 transition-colors">
+                      {s.nombre}
+                    </h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">{s.resumenBreve}</p>
+                  </Link>
+                ))}
               </div>
-            ))}
-          </div>
+              <div className="text-center mt-10">
+                <Link
+                  href="/servicios"
+                  className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 text-white px-6 py-3 rounded-xl text-sm font-medium transition-all"
+                >
+                  Ver todos los servicios →
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

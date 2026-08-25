@@ -9,6 +9,8 @@ import { ExperienciaFormPage } from "@/features/experiencia/experiencia-form-pag
 import { PerfilPage } from "@/features/perfil/perfil-page";
 import { PostsListPage } from "@/features/blog/posts-list-page";
 import { PostFormPage } from "@/features/blog/post-form-page";
+import { ServiciosListPage } from "@/features/servicios/servicios-list-page";
+import { ServicioFormPage } from "@/features/servicios/servicio-form-page";
 
 function App() {
   return (
@@ -26,9 +28,12 @@ function App() {
         <Route path="/blog" element={<PostsListPage />} />
         <Route path="/blog/nuevo" element={<PostFormPage />} />
         <Route path="/blog/:id" element={<PostFormPage />} />
+        <Route path="/servicios" element={<ServiciosListPage />} />
+        <Route path="/servicios/nuevo" element={<ServicioFormPage />} />
+        <Route path="/servicios/:id" element={<ServicioFormPage />} />
         <Route path="/perfil" element={<PerfilPage />} />
-        {/* Servicios/Certificaciones se agregan aquí con el mismo patrón
-            (lista + :id) cuando existan. */}
+        {/* Certificaciones se agrega aquí con el mismo patrón (lista +
+            :id) cuando exista. */}
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

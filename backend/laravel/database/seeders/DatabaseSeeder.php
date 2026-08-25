@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
         // Los 3 artículos reales solo se migran si ya existe un Perfil
         // (autor_id obligatorio, nunca se fabrica - ver PostSeeder).
         $this->call(PostSeeder::class);
+
+        // Los 6 servicios reales ya estaban en producción (hardcodeados
+        // en app/page.tsx) - sin dependencias bloqueantes, se migran siempre.
+        $this->call(ServicioSeeder::class);
     }
 
     /**
