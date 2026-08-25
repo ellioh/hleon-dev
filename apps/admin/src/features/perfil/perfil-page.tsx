@@ -89,6 +89,17 @@ export function PerfilPage() {
         <FormField label="Título profesional" htmlFor="titulo_profesional" required error={form.formState.errors.titulo_profesional?.message}>
           <Input id="titulo_profesional" {...form.register("titulo_profesional")} />
         </FormField>
+        <FormField
+          label="Título profesional (inglés)"
+          htmlFor="titulo_profesional_en"
+          hint="Opcional. Se usa en la versión en inglés del CV (/hire-me)."
+        >
+          <Input
+            id="titulo_profesional_en"
+            value={form.watch("titulo_profesional_en") ?? ""}
+            onChange={(e) => form.setValue("titulo_profesional_en", e.target.value || null)}
+          />
+        </FormField>
         <FormField label="Email" htmlFor="email" required error={form.formState.errors.email?.message}>
           <Input id="email" type="email" {...form.register("email")} />
         </FormField>
@@ -103,6 +114,18 @@ export function PerfilPage() {
         </FormField>
         <FormField label="Bio larga" htmlFor="bio_larga" required error={form.formState.errors.bio_larga?.message}>
           <Textarea id="bio_larga" rows={8} {...form.register("bio_larga")} />
+        </FormField>
+        <FormField
+          label="Bio larga (inglés)"
+          htmlFor="bio_larga_en"
+          hint="Opcional. Se usa en la versión en inglés del CV (/hire-me) - si la dejas vacía, esa sección simplemente no aparece ahí."
+        >
+          <Textarea
+            id="bio_larga_en"
+            rows={8}
+            value={form.watch("bio_larga_en") ?? ""}
+            onChange={(e) => form.setValue("bio_larga_en", e.target.value || null)}
+          />
         </FormField>
         <FormField label="Foto" htmlFor="foto">
           <ImageUploader

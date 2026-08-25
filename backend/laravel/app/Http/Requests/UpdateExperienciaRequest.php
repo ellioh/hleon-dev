@@ -16,11 +16,13 @@ class UpdateExperienciaRequest extends FormRequest
         return [
             'organizacion_id' => ['sometimes', 'integer', 'exists:organizaciones,id'],
             'rol' => ['sometimes', 'string', 'max:120'],
+            'rol_en' => ['sometimes', 'nullable', 'string', 'max:120'],
             'modalidad' => ['sometimes', 'in:remoto,presencial,hibrido,freelance'],
             'fecha_inicio' => ['sometimes', 'date'],
             'fecha_fin' => ['sometimes', 'nullable', 'date', 'after:fecha_inicio', 'prohibited_if:actual,true'],
             'actual' => ['sometimes', 'boolean'],
             'resumen' => ['sometimes', 'string', 'max:300'],
+            'resumen_en' => ['sometimes', 'nullable', 'string', 'max:300'],
             'descripcion' => ['sometimes', 'string'],
             'ubicacion' => ['sometimes', 'nullable', 'string', 'max:120'],
             'destacado' => ['sometimes', 'boolean'],

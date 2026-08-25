@@ -38,3 +38,7 @@ Validada en dos capas: `Store/UpdateExperienciaRequest` (`prohibited_if:actual,t
 ## `GET/POST /api/admin/organizaciones?tipo=`
 
 Extendido en este módulo (antes no filtraba). `tipo` acepta `cliente`/`empleador`/`ambos`; el filtro siempre incluye además las organizaciones de tipo `ambos`. Usado por `OrganizacionSelector` en `apps/admin` para separar clientes (Proyecto) de empleadores (Experiencia) sin duplicar la tabla.
+
+## `rol_en` / `resumen_en`
+
+Agregados en [ADR 0011](../adr/0011-educacion-y-cv-bilingue-hire-me.md) — insumo de `/hire-me`, la versión en inglés del CV. Ambos nullable; si cualquiera de los dos falta, esa experiencia simplemente no aparece en `/hire-me` (nunca se muestra `rol`/`resumen` en español como respaldo). `descripcion` y `logros` no se tradujeron — son contenido narrativo largo, fuera del alcance de un CV compacto.

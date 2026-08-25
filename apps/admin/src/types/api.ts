@@ -138,11 +138,13 @@ export interface Experiencia {
   id: number;
   organizacion: Organizacion | null;
   rol: string;
+  rolEn: string | null;
   modalidad: ModalidadExperiencia;
   fechaInicio: string;
   fechaFin: string | null;
   actual: boolean;
   resumen: string;
+  resumenEn: string | null;
   descripcion: string;
   ubicacion: string | null;
   logros: ExperienciaLogro[];
@@ -166,8 +168,10 @@ export interface Perfil {
   nombreCompleto: string;
   nombrePublico: string | null;
   tituloProfesional: string;
+  tituloProfesionalEn: string | null;
   bioCorta: string;
   bioLarga: string;
+  bioLargaEn: string | null;
   foto: MediaItem | null;
   email: string;
   ubicacion: string;
@@ -259,6 +263,23 @@ export interface Certificacion {
   urlVerificacion: string | null;
   imagenInsignia: MediaItem | null;
   destacado: boolean;
+  visible: boolean;
+  orden: number;
+  creadoEn: string;
+  eliminadoEn: string | null;
+}
+
+/** Forma única (EducacionResource) - sin split lista/detalle, sin SEO/slug/publicación (mismo criterio que Certificacion). */
+export interface Educacion {
+  id: number;
+  institucion: string;
+  titulo: string;
+  tituloEn: string | null;
+  campoEstudio: string | null;
+  fechaInicio: string;
+  fechaFin: string | null;
+  enCurso: boolean;
+  descripcion: string | null;
   visible: boolean;
   orden: number;
   creadoEn: string;

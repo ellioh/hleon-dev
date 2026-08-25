@@ -26,11 +26,13 @@ class Experiencia extends Model
     protected $fillable = [
         'organizacion_id',
         'rol',
+        'rol_en',
         'modalidad',
         'fecha_inicio',
         'fecha_fin',
         'actual',
         'resumen',
+        'resumen_en',
         'descripcion',
         'ubicacion',
         'destacado',

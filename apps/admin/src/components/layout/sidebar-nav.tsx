@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Award, Briefcase, FolderKanban, LayoutDashboard, LogOut, Newspaper, Sparkles, User } from "lucide-react";
+import { Award, Briefcase, FolderKanban, GraduationCap, LayoutDashboard, LogOut, Newspaper, Sparkles, User } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ const ITEMS = [
   { to: "/blog", label: "Blog", icon: Newspaper, end: false },
   { to: "/servicios", label: "Servicios", icon: Sparkles, end: false },
   { to: "/certificaciones", label: "Certificaciones", icon: Award, end: false },
+  { to: "/educacion", label: "Educación", icon: GraduationCap, end: false },
   { to: "/perfil", label: "Mi perfil", icon: User, end: false },
 ];
 

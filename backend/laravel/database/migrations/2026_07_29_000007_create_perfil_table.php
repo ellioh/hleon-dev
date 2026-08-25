@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Schema;
 // Singleton: fuente única de identidad, contacto y disponibilidad. La fila
 // única se garantiza a nivel de aplicación (PerfilService en el futuro
 // modelo Eloquent), no con una restricción de base de datos.
+//
+// *_en: versión en inglés para /hire-me, nullable - mismo criterio que
+// experiencias.rol_en/resumen_en (ver ADR de Educación/hire-me).
 return new class extends Migration
 {
     public function up(): void
@@ -16,8 +19,10 @@ return new class extends Migration
             $table->string('nombre_completo', 160);
             $table->string('nombre_publico', 160)->nullable();
             $table->string('titulo_profesional', 160);
+            $table->string('titulo_profesional_en', 160)->nullable();
             $table->string('bio_corta', 200);
             $table->mediumText('bio_larga');
+            $table->mediumText('bio_larga_en')->nullable();
             $table->foreignId('foto_media_id')->nullable()->constrained('media')->nullOnDelete();
             $table->string('email', 190);
             $table->string('ubicacion', 120);

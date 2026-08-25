@@ -1,17 +1,20 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\CertificacionController as AdminCertificacionController;
+use App\Http\Controllers\Api\Admin\EducacionController as AdminEducacionController;
 use App\Http\Controllers\Api\Admin\ExperienciaController as AdminExperienciaController;
 use App\Http\Controllers\Api\Admin\MediaController;
 use App\Http\Controllers\Api\Admin\OrganizacionController;
-use App\Http\Controllers\Api\Admin\PerfilController;
+use App\Http\Controllers\Api\Admin\PerfilController as AdminPerfilController;
 use App\Http\Controllers\Api\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Api\Admin\ProyectoController as AdminProyectoController;
 use App\Http\Controllers\Api\Admin\ServicioController as AdminServicioController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\CertificacionController;
+use App\Http\Controllers\Api\EducacionController;
 use App\Http\Controllers\Api\ExperienciaController;
+use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProyectoController;
 use App\Http\Controllers\Api\ServicioController;
@@ -33,12 +36,14 @@ Route::get('/proyectos', [ProyectoController::class, 'index']);
 Route::get('/proyectos/{slug}', [ProyectoController::class, 'show']);
 Route::get('/experiencias', [ExperienciaController::class, 'index']);
 Route::get('/certificaciones', [CertificacionController::class, 'index']);
+Route::get('/educaciones', [EducacionController::class, 'index']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{slug}', [PostController::class, 'show']);
 Route::get('/servicios', [ServicioController::class, 'index']);
 Route::get('/servicios/{slug}', [ServicioController::class, 'show']);
 Route::get('/categorias', [CategoriaController::class, 'index']);
 Route::get('/tecnologias', [TecnologiaController::class, 'index']);
+Route::get('/perfil', [PerfilController::class, 'show']);
 
 // --- Admin (consumido por apps/admin, exige sesión) ---
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
@@ -68,6 +73,13 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::delete('/certificaciones/{certificacion}', [AdminCertificacionController::class, 'destroy']);
     Route::post('/certificaciones/{id}/restaurar', [AdminCertificacionController::class, 'restore']);
 
+    Route::get('/educaciones', [AdminEducacionController::class, 'index']);
+    Route::post('/educaciones', [AdminEducacionController::class, 'store']);
+    Route::get('/educaciones/{educacion}', [AdminEducacionController::class, 'show'])->withTrashed();
+    Route::put('/educaciones/{educacion}', [AdminEducacionController::class, 'update']);
+    Route::delete('/educaciones/{educacion}', [AdminEducacionController::class, 'destroy']);
+    Route::post('/educaciones/{id}/restaurar', [AdminEducacionController::class, 'restore']);
+
     Route::get('/posts', [AdminPostController::class, 'index']);
     Route::post('/posts', [AdminPostController::class, 'store']);
     Route::get('/posts/{post}', [AdminPostController::class, 'show'])->withTrashed();
@@ -90,6 +102,6 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/organizaciones', [OrganizacionController::class, 'index']);
     Route::post('/organizaciones', [OrganizacionController::class, 'store']);
 
-    Route::get('/perfil', [PerfilController::class, 'show']);
-    Route::put('/perfil', [PerfilController::class, 'update']);
+    Route::get('/perfil', [AdminPerfilController::class, 'show']);
+    Route::put('/perfil', [AdminPerfilController::class, 'update']);
 });

@@ -5,6 +5,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
+// Sin categoría/SEO/slug/publicación - insumo de /trayectoria, mismo
+// patrón que Certificaciones (ver ADR 0010). `titulo_en` es la única
+// versión en inglés necesaria (el nombre del grado); institución no se
+// traduce (nombre propio) - ver ADR de Educación/hire-me.
 return new class extends Migration
 {
     public function up(): void
@@ -13,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('institucion', 160);
             $table->string('titulo', 160);
+            $table->string('titulo_en', 160)->nullable();
             $table->string('campo_estudio', 120)->nullable();
             $table->date('fecha_inicio');
             $table->date('fecha_fin')->nullable();

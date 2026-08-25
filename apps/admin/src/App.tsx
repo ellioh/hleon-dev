@@ -13,6 +13,8 @@ import { ServiciosListPage } from "@/features/servicios/servicios-list-page";
 import { ServicioFormPage } from "@/features/servicios/servicio-form-page";
 import { CertificacionesListPage } from "@/features/certificaciones/certificaciones-list-page";
 import { CertificacionFormPage } from "@/features/certificaciones/certificacion-form-page";
+import { EducacionesListPage } from "@/features/educacion/educaciones-list-page";
+import { EducacionFormPage } from "@/features/educacion/educacion-form-page";
 
 function App() {
   return (
@@ -36,6 +38,9 @@ function App() {
         <Route path="/certificaciones" element={<CertificacionesListPage />} />
         <Route path="/certificaciones/nuevo" element={<CertificacionFormPage />} />
         <Route path="/certificaciones/:id" element={<CertificacionFormPage />} />
+        <Route path="/educacion" element={<EducacionesListPage />} />
+        <Route path="/educacion/nuevo" element={<EducacionFormPage />} />
+        <Route path="/educacion/:id" element={<EducacionFormPage />} />
         <Route path="/perfil" element={<PerfilPage />} />
       </Route>
 

@@ -1,16 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PerfilRequest;
 use App\Http\Resources\PerfilResource;
 use App\Services\PerfilService;
 
-/**
- * CRUD de administración. El equivalente público de solo lectura vive en
- * Api\PerfilController (insumo de /hire-me).
- */
+/** Público, sin auth: insumo de /hire-me (ver ADR de Educación/hire-me). */
 class PerfilController extends Controller
 {
     public function __construct(private readonly PerfilService $perfil) {}
@@ -20,12 +16,5 @@ class PerfilController extends Controller
         $perfil = $this->perfil->obtener();
 
         return $perfil ? PerfilResource::make($perfil->load('foto')) : response()->json(['data' => null]);
-    }
-
-    public function update(PerfilRequest $request)
-    {
-        $perfil = $this->perfil->guardar($request->validated());
-
-        return PerfilResource::make($perfil->load('foto'));
     }
 }

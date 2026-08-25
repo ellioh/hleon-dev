@@ -135,6 +135,25 @@ export function ExperienciaFormPage() {
               </FormField>
             </FormSection>
 
+            <FormSection title="Versión en inglés (hire-me)" description='Opcional. Si dejas estos campos vacíos, esta experiencia simplemente no aparece en /hire-me.'>
+              <FormField label="Rol / cargo (inglés)" htmlFor="rol_en">
+                <Input
+                  id="rol_en"
+                  value={form.watch("rol_en") ?? ""}
+                  onChange={(e) => form.setValue("rol_en", e.target.value || null)}
+                />
+              </FormField>
+              <FormField label="Resumen (inglés)" htmlFor="resumen_en" hint="Máx. 300 caracteres.">
+                <Textarea
+                  id="resumen_en"
+                  maxLength={300}
+                  rows={3}
+                  value={form.watch("resumen_en") ?? ""}
+                  onChange={(e) => form.setValue("resumen_en", e.target.value || null)}
+                />
+              </FormField>
+            </FormSection>
+
             <FormSection title="Periodo">
               <div className="grid gap-4 sm:grid-cols-2">
                 <FormField label="Modalidad" htmlFor="modalidad" required>

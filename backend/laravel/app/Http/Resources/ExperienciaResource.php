@@ -18,11 +18,13 @@ class ExperienciaResource extends JsonResource
             'id' => $this->id,
             'organizacion' => OrganizacionResource::make($this->whenLoaded('organizacion')),
             'rol' => $this->rol,
+            'rolEn' => $this->rol_en,
             'modalidad' => $this->modalidad,
             'fechaInicio' => $this->fecha_inicio?->toDateString(),
             'fechaFin' => $this->fecha_fin?->toDateString(),
             'actual' => $this->actual,
             'resumen' => $this->resumen,
+            'resumenEn' => $this->resumen_en,
             'descripcion' => $this->descripcion,
             'ubicacion' => $this->ubicacion,
             'logros' => $this->whenLoaded('logros', fn () => $this->logros->map(fn ($l) => [

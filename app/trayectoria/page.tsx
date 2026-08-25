@@ -1,5 +1,6 @@
 import { getExperienciasPublicadas } from "@/lib/experiencias-api";
 import { getCertificacionesVisibles } from "@/lib/certificaciones-api";
+import { getEducacionesVisibles } from "@/lib/educaciones-api";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -19,6 +20,7 @@ function formatearMes(fecha: string): string {
 export default async function TrayectoriaPage() {
   const experiencias = await getExperienciasPublicadas();
   const certificaciones = await getCertificacionesVisibles();
+  const educaciones = await getEducacionesVisibles();
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -144,6 +146,30 @@ export default async function TrayectoriaPage() {
                   )}
                 </article>
               ))}
+            </div>
+          )}
+
+          {/* EDUCACIÓN */}
+          {educaciones.length > 0 && (
+            <div className="mt-20">
+              <h2 className="text-2xl font-bold text-white mb-8 text-center">Educación</h2>
+              <div className="space-y-6">
+                {educaciones.map((edu) => (
+                  <div key={edu.id} className="bg-slate-900/50 border border-slate-800 rounded-xl p-5">
+                    <div className="flex items-center gap-3 mb-1 flex-wrap">
+                      <h3 className="text-white font-semibold">{edu.titulo}</h3>
+                    </div>
+                    <p className="text-slate-300 text-sm">{edu.institucion}</p>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 mt-1.5">
+                      <span>
+                        {formatearMes(edu.fechaInicio)} — {edu.enCurso ? "En curso" : edu.fechaFin ? formatearMes(edu.fechaFin) : "—"}
+                      </span>
+                      {edu.campoEstudio && <span>{edu.campoEstudio}</span>}
+                    </div>
+                    {edu.descripcion && <p className="text-slate-400 text-sm leading-relaxed mt-3">{edu.descripcion}</p>}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

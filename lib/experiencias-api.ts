@@ -36,11 +36,13 @@ export interface Experiencia {
   id: number;
   organizacion: Organizacion | null;
   rol: string;
+  rolEn: string | null;
   modalidad: "remoto" | "presencial" | "hibrido" | "freelance";
   fechaInicio: string;
   fechaFin: string | null;
   actual: boolean;
   resumen: string;
+  resumenEn: string | null;
   descripcion: string;
   ubicacion: string | null;
   logros: ExperienciaLogro[];

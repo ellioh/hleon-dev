@@ -6,11 +6,13 @@ export function experienciaToFormValues(e: Experiencia): ExperienciaFormValues {
   return {
     organizacion_id: e.organizacion?.id ?? 0,
     rol: e.rol,
+    rol_en: e.rolEn,
     modalidad: e.modalidad,
     fecha_inicio: e.fechaInicio,
     fecha_fin: e.fechaFin,
     actual: e.actual,
     resumen: e.resumen,
+    resumen_en: e.resumenEn,
     descripcion: e.descripcion,
     ubicacion: e.ubicacion,
     destacado: e.destacado,

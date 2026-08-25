@@ -17,11 +17,13 @@ class StoreExperienciaRequest extends FormRequest
         return [
             'organizacion_id' => ['required', 'integer', 'exists:organizaciones,id'],
             'rol' => ['required', 'string', 'max:120'],
+            'rol_en' => ['nullable', 'string', 'max:120'],
             'modalidad' => ['required', 'in:remoto,presencial,hibrido,freelance'],
             'fecha_inicio' => ['required', 'date'],
             'fecha_fin' => ['nullable', 'date', 'after:fecha_inicio', 'prohibited_if:actual,true'],
             'actual' => ['boolean'],
             'resumen' => ['required', 'string', 'max:300'],
+            'resumen_en' => ['nullable', 'string', 'max:300'],
             'descripcion' => ['required', 'string'],
             'ubicacion' => ['nullable', 'string', 'max:120'],
             'destacado' => ['boolean'],
