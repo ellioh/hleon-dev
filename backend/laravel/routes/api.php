@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\CertificacionController as AdminCertificacionController;
 use App\Http\Controllers\Api\Admin\ExperienciaController as AdminExperienciaController;
 use App\Http\Controllers\Api\Admin\MediaController;
 use App\Http\Controllers\Api\Admin\OrganizacionController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Api\Admin\ProyectoController as AdminProyectoController
 use App\Http\Controllers\Api\Admin\ServicioController as AdminServicioController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriaController;
+use App\Http\Controllers\Api\CertificacionController;
 use App\Http\Controllers\Api\ExperienciaController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProyectoController;
@@ -30,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/proyectos', [ProyectoController::class, 'index']);
 Route::get('/proyectos/{slug}', [ProyectoController::class, 'show']);
 Route::get('/experiencias', [ExperienciaController::class, 'index']);
+Route::get('/certificaciones', [CertificacionController::class, 'index']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{slug}', [PostController::class, 'show']);
 Route::get('/servicios', [ServicioController::class, 'index']);
@@ -57,6 +60,13 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/experiencias/{id}/restaurar', [AdminExperienciaController::class, 'restore']);
     Route::post('/experiencias/{experiencia}/publicar', [AdminExperienciaController::class, 'publicar']);
     Route::post('/experiencias/{experiencia}/despublicar', [AdminExperienciaController::class, 'despublicar']);
+
+    Route::get('/certificaciones', [AdminCertificacionController::class, 'index']);
+    Route::post('/certificaciones', [AdminCertificacionController::class, 'store']);
+    Route::get('/certificaciones/{certificacion}', [AdminCertificacionController::class, 'show'])->withTrashed();
+    Route::put('/certificaciones/{certificacion}', [AdminCertificacionController::class, 'update']);
+    Route::delete('/certificaciones/{certificacion}', [AdminCertificacionController::class, 'destroy']);
+    Route::post('/certificaciones/{id}/restaurar', [AdminCertificacionController::class, 'restore']);
 
     Route::get('/posts', [AdminPostController::class, 'index']);
     Route::post('/posts', [AdminPostController::class, 'store']);

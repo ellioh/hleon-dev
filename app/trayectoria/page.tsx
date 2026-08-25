@@ -1,5 +1,7 @@
 import { getExperienciasPublicadas } from "@/lib/experiencias-api";
+import { getCertificacionesVisibles } from "@/lib/certificaciones-api";
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,6 +18,7 @@ function formatearMes(fecha: string): string {
 
 export default async function TrayectoriaPage() {
   const experiencias = await getExperienciasPublicadas();
+  const certificaciones = await getCertificacionesVisibles();
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -141,6 +144,58 @@ export default async function TrayectoriaPage() {
                   )}
                 </article>
               ))}
+            </div>
+          )}
+
+          {/* CERTIFICACIONES */}
+          {certificaciones.length > 0 && (
+            <div className="mt-20">
+              <h2 className="text-2xl font-bold text-white mb-8 text-center">Certificaciones</h2>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {certificaciones.map((cert) => {
+                  const expirada = cert.fechaExpiracion ? new Date(cert.fechaExpiracion) < new Date() : false;
+                  return (
+                    <div
+                      key={cert.id}
+                      className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 flex gap-4 items-start"
+                    >
+                      {cert.imagenInsignia ? (
+                        <div className="relative w-12 h-12 shrink-0">
+                          <Image
+                            src={cert.imagenInsignia.url}
+                            alt={cert.imagenInsignia.altText ?? cert.nombre}
+                            fill
+                            sizes="48px"
+                            className="object-contain"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-12 h-12 shrink-0 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-xl">
+                          🏆
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <p className="text-white text-sm font-medium leading-snug">{cert.nombre}</p>
+                        <p className="text-slate-400 text-xs mt-0.5">{cert.emisor}</p>
+                        <p className="text-slate-500 text-xs mt-1">
+                          {formatearMes(cert.fechaObtencion)}
+                          {cert.fechaExpiracion && (expirada ? " · Expiró" : ` · Vence ${formatearMes(cert.fechaExpiracion)}`)}
+                        </p>
+                        {cert.urlVerificacion && (
+                          <a
+                            href={cert.urlVerificacion}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-cyan-400 hover:text-cyan-300 text-xs transition-colors inline-block mt-1"
+                          >
+                            Verificar ↗
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 

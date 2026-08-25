@@ -248,6 +248,23 @@ export interface Servicio extends Omit<ServicioSummary, "eliminadoEn"> {
   eliminadoEn: string | null;
 }
 
+/** Forma única (CertificacionResource) - sin split lista/detalle, sin slug/categoria/SEO (ver ADR de Certificaciones). */
+export interface Certificacion {
+  id: number;
+  nombre: string;
+  emisor: string;
+  fechaObtencion: string;
+  fechaExpiracion: string | null;
+  credencialId: string | null;
+  urlVerificacion: string | null;
+  imagenInsignia: MediaItem | null;
+  destacado: boolean;
+  visible: boolean;
+  orden: number;
+  creadoEn: string;
+  eliminadoEn: string | null;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {
