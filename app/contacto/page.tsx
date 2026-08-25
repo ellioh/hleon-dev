@@ -243,8 +243,8 @@ export default function ContactoPage() {
           <div className="mt-8 text-center">
             <p className="text-slate-500 text-sm">
               ¿Prefieres escribirme directo?{" "}
-              <a href="mailto:hector@hleon.dev" className="text-indigo-400 hover:text-indigo-300 transition-colors">
-                hector@hleon.dev
+              <a href="mailto:h.leon@pucp.pe" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+                h.leon@pucp.pe
               </a>
             </p>
           </div>

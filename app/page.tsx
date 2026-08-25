@@ -54,7 +54,7 @@ const testimonials = [
   {
     name: "Carlos Mendoza",
     role: "Gerente General, Textiles del Norte SAC",
-    text: "Héctor desarrolló nuestro sistema ERP desde cero. En 4 meses pasamos de hojas de cálculo caóticas a un sistema que controla producción, inventario y ventas en tiempo real. La inversión se recuperó en menos de 6 meses.",
+    text: "Heli desarrolló nuestro sistema ERP desde cero. En 4 meses pasamos de hojas de cálculo caóticas a un sistema que controla producción, inventario y ventas en tiempo real. La inversión se recuperó en menos de 6 meses.",
     initials: "CM",
   },
   {
@@ -496,10 +496,10 @@ export default async function Home() {
                   Solicitar evaluación gratuita
                 </Link>
                 <a
-                  href="mailto:hector@hleon.dev"
+                  href="mailto:h.leon@pucp.pe"
                   className="bg-slate-800/80 hover:bg-slate-700 text-white px-8 py-4 rounded-xl font-semibold transition-all border border-slate-700"
                 >
-                  hector@hleon.dev
+                  h.leon@pucp.pe
                 </a>
               </div>
             </div>
@@ -515,7 +515,7 @@ export default async function Home() {
               <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
                 hleon.dev
               </span>
-              <p className="text-slate-500 text-sm mt-1">Héctor León — Desarrollo de Sistemas Empresariales</p>
+              <p className="text-slate-500 text-sm mt-1">Heli León — Desarrollo de Sistemas Empresariales</p>
             </div>
             <div className="flex flex-wrap gap-6 text-sm text-slate-400">
               <Link href="#servicios" className="hover:text-white transition-colors">Servicios</Link>
@@ -526,7 +526,7 @@ export default async function Home() {
               <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
             </div>
             <div className="text-slate-600 text-sm">
-              © {new Date().getFullYear()} Héctor León. Todos los derechos reservados.
+              © {new Date().getFullYear()} Heli León. Todos los derechos reservados.
             </div>
           </div>
         </div>

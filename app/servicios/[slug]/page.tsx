@@ -79,7 +79,7 @@ export default async function ServicioDetallePage({ params }: Props) {
     description: servicio.resumenBreve,
     provider: {
       "@type": "Person",
-      name: "Héctor León",
+      name: "Heli León",
       url: "https://hleon.dev",
     },
     ...(servicio.categoria ? { serviceType: servicio.categoria.nombre } : {}),
@@ -296,7 +296,7 @@ export default async function ServicioDetallePage({ params }: Props) {
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
           </div>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Héctor León</p>
+          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Heli León</p>
         </div>
       </footer>
     </div>

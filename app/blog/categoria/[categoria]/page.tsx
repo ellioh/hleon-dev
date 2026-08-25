@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${encontrada.nombre} — Blog`,
     description: `Artículos sobre ${encontrada.nombre} — desarrollo de software empresarial, sistemas a medida y digitalización de empresas.`,
     openGraph: {
-      title: `${encontrada.nombre} — Blog de Héctor León`,
-      description: `Artículos sobre ${encontrada.nombre} en el blog de Héctor León, especialista en sistemas empresariales.`,
+      title: `${encontrada.nombre} — Blog de Heli León`,
+      description: `Artículos sobre ${encontrada.nombre} en el blog de Heli León, especialista en sistemas empresariales.`,
       type: "website",
     },
     alternates: {

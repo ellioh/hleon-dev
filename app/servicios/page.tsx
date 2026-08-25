@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Servicios — Héctor León",
+  title: "Servicios — Heli León",
   description: "Servicios de desarrollo de software empresarial: ERP, CRM, e-commerce, APIs, automatización y consultoría técnica.",
   alternates: {
     canonical: "https://hleon.dev/servicios",
@@ -139,7 +139,7 @@ export default async function ServiciosPage() {
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
           </div>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Héctor León</p>
+          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Heli León</p>
         </div>
       </footer>
     </div>

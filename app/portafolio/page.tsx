@@ -4,7 +4,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Portafolio — Héctor León",
+  title: "Portafolio — Heli León",
   description: "Proyectos de desarrollo de software empresarial: ERP, CRM, e-commerce y más.",
   alternates: {
     canonical: "https://hleon.dev/portafolio",
@@ -183,7 +183,7 @@ export default async function PortafolioPage() {
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
           </div>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Héctor León</p>
+          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Heli León</p>
         </div>
       </footer>
     </div>

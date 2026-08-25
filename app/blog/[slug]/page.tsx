@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = seo?.canonicalUrl || `https://hleon.dev/blog/${post.slug}`;
   const ogImagen = seo?.ogImagen?.url ?? post.imagenDestacada?.url;
   const twitterImagen = seo?.twitterImagen?.url ?? ogImagen;
-  const nombreAutor = post.autor?.nombre ?? "Héctor León";
+  const nombreAutor = post.autor?.nombre ?? "Heli León";
 
   return {
     title: seo?.metaTitulo ? { absolute: seo.metaTitulo } : post.titulo,
@@ -70,7 +70,7 @@ export default async function BlogPostPage({ params }: Props) {
     .slice(0, 3);
 
   const urlCanonica = `https://hleon.dev/blog/${post.slug}`;
-  const nombreAutor = post.autor?.nombre ?? "Héctor León";
+  const nombreAutor = post.autor?.nombre ?? "Heli León";
   const tituloAutor = post.autor?.tituloProfesional ?? "Ingeniero de Software · Especialista en Sistemas Empresariales";
   const inicialesAutor = nombreAutor
     .split(" ")
@@ -297,7 +297,7 @@ export default async function BlogPostPage({ params }: Props) {
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
           </div>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Héctor León</p>
+          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Heli León</p>
         </div>
       </footer>
     </div>

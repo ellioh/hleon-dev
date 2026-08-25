@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: seo?.metaTitulo ? { absolute: seo.metaTitulo } : proyecto.nombre,
     description: descripcion,
-    authors: [{ name: "Héctor León", url: "https://hleon.dev" }],
+    authors: [{ name: "Heli León", url: "https://hleon.dev" }],
     robots: {
       index: seo?.robotsIndex ?? true,
       follow: seo?.robotsFollow ?? true,
@@ -75,7 +75,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
     description: proyecto.resumenEjecutivo,
     creator: {
       "@type": "Person",
-      name: "Héctor León",
+      name: "Heli León",
       url: "https://hleon.dev",
     },
     ...(proyecto.imagenPrincipal ? { image: proyecto.imagenPrincipal.url } : {}),
@@ -356,7 +356,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
           </div>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Héctor León</p>
+          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Heli León</p>
         </div>
       </footer>
     </div>

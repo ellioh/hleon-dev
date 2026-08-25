@@ -6,7 +6,7 @@ import { getExperienciasPublicadas } from "@/lib/experiencias-api";
 import { getEducacionesVisibles } from "@/lib/educaciones-api";
 
 export const metadata: Metadata = {
-  title: "Hire Me — Héctor León",
+  title: "Hire Me — Heli León",
   description: "Systems consultant CV: professional summary, work experience, and education.",
   alternates: {
     canonical: "https://hleon.dev/hire-me",
@@ -36,7 +36,7 @@ export default async function HireMePage() {
   const experienciasEn = experiencias.filter((exp) => exp.rolEn && exp.resumenEn);
   const educacionesEn = educaciones.filter((edu) => edu.tituloEn);
 
-  const nombre = perfil?.nombrePublico ?? perfil?.nombreCompleto ?? "Héctor León";
+  const nombre = perfil?.nombrePublico ?? perfil?.nombreCompleto ?? "Heli León";
   const tituloEn = perfil?.tituloProfesionalEn;
 
   return (
@@ -182,7 +182,7 @@ export default async function HireMePage() {
           <Link href="/" className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
             hleon.dev
           </Link>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Héctor León</p>
+          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Heli León</p>
         </div>
       </footer>
     </div>

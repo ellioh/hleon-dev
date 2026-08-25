@@ -6,7 +6,7 @@ const BASE_URL = "https://hleon.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Héctor León — Desarrollo de Sistemas Empresariales a Medida",
+    default: "Heli León — Desarrollo de Sistemas Empresariales a Medida",
     template: "%s | hleon.dev",
   },
   description:
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     "Perú",
     "freelancer sistemas",
   ],
-  authors: [{ name: "Héctor León", url: BASE_URL }],
-  creator: "Héctor León",
-  publisher: "Héctor León",
+  authors: [{ name: "Heli León", url: BASE_URL }],
+  creator: "Heli León",
+  publisher: "Heli León",
   robots: {
     index: true,
     follow: true,
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
     locale: "es_PE",
     url: BASE_URL,
     siteName: "hleon.dev",
-    title: "Héctor León — Desarrollo de Sistemas Empresariales a Medida",
+    title: "Heli León — Desarrollo de Sistemas Empresariales a Medida",
     description:
       "Ingeniero de software especializado en sistemas empresariales: ERP, CRM, APIs y plataformas web para empresas en Perú y Latinoamérica.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Héctor León — Sistemas Empresariales",
+    title: "Heli León — Sistemas Empresariales",
     description: "Desarrollo de software empresarial a medida: ERP, CRM, APIs y plataformas web.",
   },
   alternates: {
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
 const jsonLdPerson = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Héctor León",
+  name: "Heli León",
   url: BASE_URL,
   jobTitle: "Ingeniero de Software / Desarrollador de Sistemas Empresariales",
   description:
@@ -81,7 +81,7 @@ const jsonLdWebsite = {
   name: "hleon.dev",
   url: BASE_URL,
   description: "Desarrollo de sistemas empresariales a medida en Perú",
-  author: { "@type": "Person", name: "Héctor León" },
+  author: { "@type": "Person", name: "Heli León" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

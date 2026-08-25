@@ -6,7 +6,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Trayectoria — Héctor León",
+  title: "Trayectoria — Heli León",
   description: "Línea de tiempo profesional: experiencia laboral, roles y logros como ingeniero de software especializado en sistemas empresariales.",
   alternates: {
     canonical: "https://hleon.dev/trayectoria",
@@ -257,7 +257,7 @@ export default async function TrayectoriaPage() {
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
           </div>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Héctor León</p>
+          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Heli León</p>
         </div>
       </footer>
     </div>

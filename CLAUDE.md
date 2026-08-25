@@ -1,6 +1,6 @@
 # hleon.dev — Contexto para Claude Code
 
-Sitio personal y portafolio de Hector Leon (consultor de sistemas, Peru).
+Sitio personal y portafolio de Heli Leon (consultor de sistemas, Peru).
 Captacion de leads para servicios de consultoria (ERP, APIs, digitalizacion).
 
 - URL produccion: https://hleon.dev

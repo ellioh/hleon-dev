@@ -6,7 +6,7 @@
 
 PROPOSITO DEL PROYECTO
 --------------------------------------------------------------------------------
-Sitio web personal y portafolio profesional de Hector Leon, consultor de
+Sitio web personal y portafolio profesional de Heli Leon, consultor de
 sistemas y desarrollo de software con base en Peru. El sitio funciona como
 carta de presentacion, catalogo de proyectos, blog tecnico en espanol y punto
 de captacion de leads para servicios de consultoria (ERP, APIs, digitalizacion

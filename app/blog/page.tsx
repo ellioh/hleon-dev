@@ -3,11 +3,11 @@ import Link from "next/link";
 import { getPostsPublicados } from "@/lib/posts-api";
 
 export const metadata: Metadata = {
-  title: "Blog | Héctor León — Desarrollo de Sistemas Empresariales",
+  title: "Blog | Heli León — Desarrollo de Sistemas Empresariales",
   description:
     "Artículos sobre desarrollo de software empresarial, ERP, APIs, automatización y transformación digital para empresas en Perú y Latinoamérica.",
   openGraph: {
-    title: "Blog de Héctor León — Sistemas Empresariales",
+    title: "Blog de Heli León — Sistemas Empresariales",
     description:
       "Artículos sobre desarrollo de software empresarial, ERP, APIs, automatización y transformación digital.",
     type: "website",
@@ -179,7 +179,7 @@ export default async function BlogPage() {
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
           </div>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Héctor León</p>
+          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} Heli León</p>
         </div>
       </footer>
     </div>
