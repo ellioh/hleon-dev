@@ -76,10 +76,9 @@ cd /var/www/hleon.dev && bash deploy/deploy.sh
 ## Convivencia con la otra web del VPS
 - **Puerto:** confirmar que 3001 está libre (`ss -tlnp | grep 3001`); si no, cambiarlo
   en `ecosystem.config.cjs` y en `proxy_pass`.
-- **PHP-FPM (recomendado):** pool propio para aislar procesos. Copiar
-  `/etc/php/8.3/fpm/pool.d/www.conf` a `hleon.conf`, cambiar `[www]` → `[hleon]` y
-  `listen = /run/php/php8.3-fpm-hleon.sock`, reiniciar `php8.3-fpm` y ajustar
-  `fastcgi_pass` en el conf de nginx.
+- **PHP-FPM:** pool propio para aislar procesos (el conf de nginx ya apunta a su socket):
+  `sudo cp deploy/php-fpm/hleon.conf /etc/php/8.3/fpm/pool.d/ && sudo php-fpm8.3 -t && sudo systemctl reload php8.3-fpm`.
+  Usar `reload` y no `restart`, así los pools existentes no se cortan.
 - **PM2:** los nombres de proceso no deben repetirse (`pm2 ls`).
 - **nginx:** siempre `nginx -t` antes de `reload`; un error en este archivo tumbaría
   también la otra web.
