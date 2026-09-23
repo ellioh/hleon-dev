@@ -11,7 +11,8 @@ import { queryClient } from "@/lib/query-client";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      {/* BASE_URL es "/panel/" en build y "/" en dev (ver vite.config.ts) */}
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "") || "/"}>
         <AuthProvider>
           <App />
           <Toaster richColors position="top-right" />

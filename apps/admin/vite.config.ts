@@ -4,7 +4,11 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
 // https://vite.dev/config/
-export default defineConfig({
+// En producción el panel se sirve en hleon.dev/panel (ver ADR 0012), así que
+// el build genera rutas de assets bajo /panel/. En dev sigue en la raíz de
+// localhost:5173.
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? '/panel/' : '/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -14,4 +18,4 @@ export default defineConfig({
   server: {
     port: 5173,
   },
-})
+}))
